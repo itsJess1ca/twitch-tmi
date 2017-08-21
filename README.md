@@ -1,8 +1,6 @@
-Typescript Seed
+[![Build Status](https://travis-ci.org/j3ddesign/twitch-tmi-rxjs.svg?branch=master)](https://travis-ci.org/j3ddesign/twitch-tmi-rxjs)
+
+Twitch Tmi
 --------------------
 
-run in dev mode: `npm start`\
-build for production: `npm run build`\
-run in production: `node build/index.js`
-
-run test suite: `npm test`
+Twitch chat parser powered by Typescript and Rxjs.
