@@ -12,6 +12,8 @@
     "test": "cross-env NODE_ENV=test jest",
     "test:watch": "cross-env NODE_ENV=test jest --watch",
     "test:coverage": "npm test -- --coverage --collectCoverageFrom 'app/**/*.js' --collectCoverageFrom 'lib/**/*.js'"
+    "lint": "tslint",
+    "ci": "npm run lint && npm run test && npm run build"
   },
   "keywords": [],
   "author": "LayerOne <jed@layerone.io> (https://layerone.io)",
