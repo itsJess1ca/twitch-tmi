@@ -12,7 +12,7 @@
     "test": "cross-env NODE_ENV=test jest",
     "test:watch": "cross-env NODE_ENV=test jest --watch",
     "test:coverage": "npm test -- --coverage --collectCoverageFrom 'app/**/*.js' --collectCoverageFrom 'lib/**/*.js'",
-    "lint": "tslint",
+    "lint": "tslint src",
     "ci": "npm run lint && npm run test && npm run build"
   },
   "keywords": [],
