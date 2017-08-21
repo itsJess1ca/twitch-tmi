@@ -1,0 +1,52 @@
+{
+  "name": "twitch-chat-parser",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "prebuild": "npm run test",
+    "build": "npm run clean && npm run build:typescript",
+    "build:typescript": "tsc",
+    "clean": "rimraf build",
+    "start": "nodemon --exec \"ts-node src/index\" -e ts,js,json --watch src",
+    "test": "cross-env NODE_ENV=test jest",
+    "test:watch": "cross-env NODE_ENV=test jest --watch",
+    "test:coverage": "npm test -- --coverage --collectCoverageFrom 'app/**/*.js' --collectCoverageFrom 'lib/**/*.js'"
+  },
+  "keywords": [],
+  "author": "LayerOne <jed@layerone.io> (https://layerone.io)",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "babel-polyfill": "^6.16.0",
+    "chalk": "^2.1.0",
+    "rxjs": "^5.4.3",
+    "typescript": "^2.5.1",
+    "ws": "^3.1.0"
+  },
+  "devDependencies": {
+    "@types/chalk": "^0.4.31",
+    "@types/irc": "^0.3.32",
+    "@types/jest": "^20.0.4",
+    "@types/node": "^8.0.14",
+    "@types/ws": "^3.0.2",
+    "cross-env": "^3.2.4",
+    "exports-loader": "^0.6.3",
+    "file-loader": "^0.10.0",
+    "jest-cli": "^19.0.0",
+    "ts-jest": "^20.0.7",
+    "ts-node": "^3.2.0",
+    "tslint": "^5.5.0"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "json"
+    ]
+  }
+}
