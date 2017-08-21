@@ -41,4 +41,7 @@ it('should allow changing the logging level', () => {
   logger.trace('trace');
   expect(console.log).not.toBeCalled();
 
+  logger.info('info');
+  expect(console.log).toBeCalledWith('[15:32] info:', 'info');
+
 });
