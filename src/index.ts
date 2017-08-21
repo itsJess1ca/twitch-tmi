@@ -1,7 +1,6 @@
 // oauth:ak4fm2610g54mwdln62aacu4njdvx4
 
 import { Client } from './lib/client/client';
-import { LoggingLevels } from './lib/logger';
 
 const client = Client({
   channels: ['#j3d__'],

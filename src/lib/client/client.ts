@@ -72,7 +72,7 @@ export function Client(opts: ClientOptions): ClientInterface {
   }
 
   store.dispatch('core', setChannels(opts.channels));
-  store.dispatch('core', setLoggingLevel(fallback(opts.loggingLevel, "info")));
+  logger.setLoggingLevel(fallback(opts.loggingLevel, 'info'));
 
   message$
     .do(logger.trace)
@@ -90,7 +90,7 @@ export function Client(opts: ClientOptions): ClientInterface {
       }
     })
     .subscribe((message) => {
-      //console.log(message);
+      console.log(message);
     });
 
 
