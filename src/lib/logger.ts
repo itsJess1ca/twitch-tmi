@@ -10,7 +10,7 @@ export type LoggingLevels = "trace" | "debug" | "info" | "warn" | "error" | "fat
 
 let loggingLevel: LoggingLevels = 'trace';
 
-const formatDate = (date: Date): string => {
+export const formatDate = (date: Date): string => {
   const hours = date.getHours();
   const mins  = date.getMinutes();
 
