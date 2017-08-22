@@ -218,6 +218,8 @@ export interface MessageIdEvent {
 }
 
 export interface InternalEvents {
+  _DISCONNECT_: {};
+  _RECONNECT_: {};
   _promiseConnect: {
     reason?: string;
   };

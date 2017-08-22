@@ -494,7 +494,9 @@ export function HandleTmiMessage(message: ParsedMessage, connectionSettings, eve
     },
 
     "RECONNECT": () => {
-      //TODO
+      logger.info(`Received RECONNECT request from Twitch..`);
+      logger.info(`Disconnecting and reconnecting in ${Math.round(store.get('connection').reconnectTimer / 1000)} seconds..`);
+      __event$__.next(buildEvent('_RECONNECT_', {}, message.raw));
     },
 
     "USERSTATE": () => {

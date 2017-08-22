@@ -93,21 +93,35 @@ export function Client(opts: ClientOptions): ClientInterface {
       // console.log(message);
     });
 
+  const disconnect = async (): Promise<void> => {
+    if (ws !== null && ws.readyState !== 3) {
+      store.dispatch('connection', closeConnection(true));
+      console.log('Disconnecting From Server');
+      ws.close();
+    } else {
+      console.error(CannotCloseWS);
+      throw new Error(CannotCloseWS);
+    }
+  };
+
+  const reconnect = (timer = store.get('connection').reconnectTimer) => {
+    disconnect();
+    setTimeout(() => {
+      ClientConnect(options, message$, __event$__);
+    }, timer);
+  };
+
+  __event$__
+    .filter(event => event.type === '_RECONNECT_')
+    .do(() => reconnect())
+    .subscribe();
+
 
   // Our exposed API
   return {
     connect: ClientConnect(options, message$, __event$__),
 
-    disconnect: async (): Promise<void> => {
-      if (ws !== null && ws.readyState !== 3) {
-        store.dispatch('connection', closeConnection(true));
-        console.log('Disconnecting From Server');
-        ws.close();
-      } else {
-        console.error(CannotCloseWS);
-        throw new Error(CannotCloseWS);
-      }
-    },
+    disconnect: disconnect,
 
     on: <MessageType extends keyof ClientEventMap>(type: MessageType):
       Observable<ClientEventMap[MessageType] & { type: MessageType; raw: ParsedMessage; }> =>
