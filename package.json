@@ -1,5 +1,5 @@
 {
-  "name": "twitch-chat-parser",
+  "name": "twitch-tmi",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
