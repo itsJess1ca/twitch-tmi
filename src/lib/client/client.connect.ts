@@ -7,7 +7,7 @@ import { ClientEventMap } from './event-types';
 import { logger } from '../logger';
 import { buildEvent } from '../../utils/build-event';
 
-export let ws;
+export let __ws__;
 let options: ClientOptions;
 
 export const ClientConnect = function ClientConnect(opts: ClientOptions, message$: Subject<string>, event$: Subject<any>) {
@@ -21,24 +21,24 @@ export const ClientConnect = function ClientConnect(opts: ClientOptions, message
   store.dispatch('connection', setReconnectTimer(reconnectTimer));
 
   function connect() {
-    ws = new WebSocket(`${options.connection.secure ? 'wss' : 'ws'}://${options.connection.server}:${options.connection.port}/`, 'irc');
+    __ws__ = new WebSocket(`${options.connection.secure ? 'wss' : 'ws'}://${options.connection.server}:${options.connection.port}/`, 'irc');
 
-    ws.on('open', () => {
+    __ws__.on('open', () => {
       logger.info(`Connecting to ${opts.connection.server}:${opts.connection.port}`);
       event$.next(buildEvent('connecting', {port: opts.connection.port, address: opts.connection.server}, null));
 
       event$.next(buildEvent('logon', {}, null));
-      ws.send('CAP REQ :twitch.tv/tags twitch.tv/commands twitch.tv/membership');
-      ws.send(`PASS ${options.identity.password}`);
-      ws.send(`NICK ${options.identity.username}`);
-      ws.send(`USER ${options.identity.username} 8 * :${options.identity.username}`);
+      __ws__.send('CAP REQ :twitch.tv/tags twitch.tv/commands twitch.tv/membership');
+      __ws__.send(`PASS ${options.identity.password}`);
+      __ws__.send(`NICK ${options.identity.username}`);
+      __ws__.send(`USER ${options.identity.username} 8 * :${options.identity.username}`);
     });
 
-    ws.on('close', _onClose);
-    ws.on('error', _onError);
-    ws.on('message', (message) => message$.next(message));
+    __ws__.on('close', _onClose);
+    __ws__.on('error', _onError);
+    __ws__.on('message', (message) => message$.next(message));
 
-    ws.on('ping', () => ws.send('pong'));
+    __ws__.on('ping', () => __ws__.send('pong'));
   }
 
   function _onError() {
@@ -49,7 +49,7 @@ export const ClientConnect = function ClientConnect(opts: ClientOptions, message
     clearTimeout(store.get('core').pingTimeout);
 
     event$.next(buildEvent('disconnected', {
-      reason: ws === null ? 'Connection Closed' : 'Unable to connect'
+      reason: __ws__ === null ? 'Connection Closed' : 'Unable to connect'
     }, null));
 
     attemptReconnect();
@@ -93,7 +93,7 @@ export const ClientConnect = function ClientConnect(opts: ClientOptions, message
       }, reconnectTimer);
     }
 
-    ws = null;
+    __ws__ = null;
   }
 
   return connect;

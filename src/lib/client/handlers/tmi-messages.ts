@@ -1,7 +1,6 @@
 import { ParsedMessage } from '../../parser/message';
 import { noop } from '../../../utils/noop';
 import { fallback } from '../../../utils/fallback';
-import { ws } from '../client.connect';
 import { __event$__, ClientOptions, store } from '../client';
 import { setPingLoop, setPingTimeout, setUsername } from '../../state/core/core.actions';
 import { Timer } from '../../timer.class';
@@ -12,6 +11,7 @@ import { ClientEventMap, InternalEvents, KnownMsgIds, UserState } from '../event
 import { logger } from '../../logger';
 import { buildEvent } from '../../../utils/build-event';
 import { replaceAll } from '../../../utils/replace-all';
+import { __ws__ } from '../client.connect';
 
 export function HandleTmiMessage(message: ParsedMessage, connectionSettings, event$: Subject<any>): void {
   const commands = {
@@ -34,15 +34,15 @@ export function HandleTmiMessage(message: ParsedMessage, connectionSettings, eve
       event$.next(buildEvent('_promiseConnect', {}, message.raw));
       const pingLoop = setInterval(() => {
         // Make sure the connection is opened before sending the message..
-        if (ws !== null && ws.readyState !== 2 && ws.readyState !== 3) {
-          ws.send("PING");
+        if (__ws__ !== null && __ws__.readyState !== 2 && __ws__.readyState !== 3) {
+          __ws__.send("PING");
         }
         const latency = new Date();
         const pingTimeout = setTimeout(() => {
-          if (ws !== null) {
+          if (__ws__ !== null) {
             store.dispatch('connection', closeConnection(false));
             console.error("Ping timeout.");
-            ws.close();
+            __ws__.close();
 
             clearInterval(pingLoop);
             clearTimeout(pingTimeout);
@@ -56,8 +56,8 @@ export function HandleTmiMessage(message: ParsedMessage, connectionSettings, eve
       // console.log(channels);
       for (const channel of store.get('core').channels) {
         joinQueue.add(function (channel) {
-          if (ws !== null && ws.readyState !== 2 && ws.readyState !== 3) {
-            ws.send(`JOIN ${formatChannelName(channel)}`);
+          if (__ws__ !== null && __ws__.readyState !== 2 && __ws__.readyState !== 3) {
+            __ws__.send(`JOIN ${formatChannelName(channel)}`);
           }
         }.bind(this, channel));
       }
@@ -351,14 +351,14 @@ export function HandleTmiMessage(message: ParsedMessage, connectionSettings, eve
           store.dispatch('connection', closeConnection(false));
           store.dispatch('connection', setShouldReconnect(false));
           logger.error(message.content);
-          ws.close();
+          __ws__.close();
 
         } else if (message.content.includes("Invalid NICK")) {
           // Handle invalid NICK
           store.dispatch('connection', closeConnection(false));
           store.dispatch('connection', setShouldReconnect(false));
           logger.error("Invalid NICK");
-          ws.close();
+          __ws__.close();
         } else {
           logger.warn(`Could not parse NOTICE message from tmi.twitch.tv:
             ${JSON.stringify(message, null, 2)}

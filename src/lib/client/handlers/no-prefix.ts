@@ -1,5 +1,5 @@
 import { ParsedMessage } from '../../parser/message';
-import { ws } from '../client.connect';
+import { __ws__ } from '../client.connect';
 import { store } from '../client';
 import { Subject } from "rxjs/Subject";
 import { setCurrentLatency } from '../../state/connection/connection.actions';
@@ -9,8 +9,8 @@ import { buildEvent } from '../../../utils/build-event';
 export function HandleNoPrefixMessage(message: ParsedMessage, event$: Subject<any>) {
   const commands = {
     "PING": () => {
-      if (ws !== null && ws.readyState !== 2 && ws.readyState !== 3) {
-        ws.send("PONG");
+      if (__ws__ !== null && __ws__.readyState !== 2 && __ws__.readyState !== 3) {
+        __ws__.send("PONG");
       }
       event$.next(buildEvent('ping', {}, message.raw));
     },

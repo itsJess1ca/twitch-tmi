@@ -3,7 +3,7 @@ import { parseBadges } from '../parser/badges';
 import { ParsedMessage, parseMessage } from '../parser/message';
 import { fallback } from '../../utils/fallback';
 import { formatChannelName } from '../../utils/channel';
-import { ws } from './client.connect';
+import { __ws__ } from './client.connect';
 import { noop } from '../../utils/noop';
 import { Timer } from '../timer.class';
 import { isJustinfan } from '../../utils/type-checks';
@@ -51,8 +51,8 @@ export function ClientHandleMessage(message: ParsedMessage) {
   if (message.prefix === null) {
     const commands = {
       "PING": () => {
-        if (ws !== null && ws.readyState !== 2 && ws.readyState !== 3) {
-          ws.send("PONG");
+        if (__ws__ !== null && __ws__.readyState !== 2 && __ws__.readyState !== 3) {
+          __ws__.send("PONG");
         }
       },
       "PONG": () => {
@@ -83,15 +83,15 @@ export function ClientHandleMessage(message: ParsedMessage) {
         console.log('connected to server');
         const pingLoop = setInterval(() => {
           // Make sure the connection is opened before sending the message..
-          if (ws !== null && ws.readyState !== 2 && ws.readyState !== 3) {
-            ws.send("PING");
+          if (__ws__ !== null && __ws__.readyState !== 2 && __ws__.readyState !== 3) {
+            __ws__.send("PING");
           }
           const latency = new Date();
           const pingTimeout = setTimeout(() => {
-            if (ws !== null) {
+            if (__ws__ !== null) {
               const wasCloseCalled = false;
               console.error("Ping timeout.");
-              ws.close();
+              __ws__.close();
 
               clearInterval(pingLoop);
               clearTimeout(pingTimeout);
