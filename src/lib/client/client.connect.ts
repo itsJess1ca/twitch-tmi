@@ -25,9 +25,9 @@ export const ClientConnect = function ClientConnect(opts: ClientOptions, message
 
     ws.on('open', () => {
       logger.info(`Connecting to ${opts.connection.server}:${opts.connection.port}`);
-      event$.next(buildEvent('connecting', {port: opts.connection.port, address: opts.connection.server}));
+      event$.next(buildEvent('connecting', {port: opts.connection.port, address: opts.connection.server}, null));
 
-      event$.next(buildEvent('logon', {}));
+      event$.next(buildEvent('logon', {}, null));
       ws.send('CAP REQ :twitch.tv/tags twitch.tv/commands twitch.tv/membership');
       ws.send(`PASS ${options.identity.password}`);
       ws.send(`NICK ${options.identity.username}`);
@@ -50,7 +50,7 @@ export const ClientConnect = function ClientConnect(opts: ClientOptions, message
 
     event$.next(buildEvent('disconnected', {
       reason: ws === null ? 'Connection Closed' : 'Unable to connect'
-    }));
+    }, null));
 
     attemptReconnect();
   }
@@ -69,24 +69,24 @@ export const ClientConnect = function ClientConnect(opts: ClientOptions, message
 
       store.dispatch('connection', closeConnection(false));
       logger.info(reason);
-      event$.next(buildEvent('disconnected', {reason}));
+      event$.next(buildEvent('disconnected', {reason}, null));
     } else {
       // Got disconnected from the server
-      event$.next(buildEvent('disconnected', {reason}));
+      event$.next(buildEvent('disconnected', {reason}, null));
       attemptReconnect();
     }
   }
 
   function attemptReconnect() {
     if (opts.connection.reconnect && store.get('connection').reconnections === opts.connection.maxReconnectAttempts) {
-      event$.next(buildEvent('maxreconnect'));
+      event$.next(buildEvent('maxreconnect', {}, null));
       logger.error(`Maximum reconnection attempts (${opts.connection.maxReconnectAttempts}) reached`);
     }
     if (opts.connection.reconnect && !reconnecting && store.get('connection').reconnections <= opts.connection.maxReconnectAttempts - 1) {
       reconnecting = true;
       store.dispatch('connection', incrementReconnections());
       logger.error(`Reconnecting in ${Math.round(reconnectTimer / 1000)} seconds`);
-      event$.next(buildEvent('reconnect'));
+      event$.next(buildEvent('reconnect', {}, null));
       setTimeout(() => {
         reconnecting = false;
         connect();

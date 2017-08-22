@@ -54,6 +54,7 @@ it('should handle moderators for multiple channels', () => {
   expect(store.get('channel')['test'].moderators).toEqual(['mod1']);
   expect(store.get('channel')['test2'].moderators).toEqual(['mod2', 'mod3']);
 });
+
 it('should be able to remove moderators from a channel', () => {
 
   const store = createStore({core: coreReducer, channel: channelReducer});
@@ -66,3 +67,5 @@ it('should be able to remove moderators from a channel', () => {
   store.dispatch('channel', removeModerator('test', ['mod2', 'mod3']));
   expect(store.get('channel')['test'].moderators).toEqual(['mod4']);
 });
+
+// TODO: More tests for each reducer action

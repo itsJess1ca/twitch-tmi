@@ -120,7 +120,7 @@ export interface ModsEvent {
 
 export interface NoticeEvent {
   channel: string;
-  msgid: KnownMsgIds;
+  messageId: KnownMsgIds;
   message: string;
 }
 
@@ -182,7 +182,7 @@ export interface SubscribersEvent {
 export interface SubscriptionEvent {
   channel: string;
   username: string;
-  method: {
+  methods: {
     [method: string]: string;
   };
   message: string;
@@ -213,7 +213,55 @@ export interface WhisperEvent {
   self: boolean;
 }
 
-export interface ClientEventMap {
+export interface MessageIdEvent {
+  messageId?: string;
+}
+
+export interface InternalEvents {
+  _promiseConnect: {
+    reason?: string;
+  };
+  _promisePart: {};
+  _promiseDisconnect: {
+    reason?: string;
+  };
+  _promisePing: {
+    latency: number;
+  };
+  _promiseSubscribers: MessageIdEvent;
+  _promiseSubscribersOff: MessageIdEvent;
+  _promiseEmoteonly: MessageIdEvent;
+  _promiseEmoteonlyoff: MessageIdEvent;
+  _promiseR9kbeta: MessageIdEvent;
+  _promiseR9kbetaoff: MessageIdEvent;
+  _promiseMods: {
+    messageId?: string;
+    mods: string[];
+  };
+  _promiseJoin: MessageIdEvent | {};
+  _promiseBan: MessageIdEvent | {};
+  _promiseClear: MessageIdEvent;
+  _promiseUnmod: MessageIdEvent | {};
+  _promiseColor: MessageIdEvent | {};
+  _promiseCommercial: MessageIdEvent | {};
+  _promiseHost: {
+    messageId?: string;
+    remainingHosts: number;
+  };
+  _promiseTimeout: MessageIdEvent;
+  _promiseSlow: MessageIdEvent;
+  _promiseSlowoff: MessageIdEvent;
+  _promiseUnban: MessageIdEvent;
+  _promiseUnhost: MessageIdEvent;
+  _promiseWhisper: MessageIdEvent;
+  _promiseMod: MessageIdEvent;
+  _promiseFollowers: MessageIdEvent;
+  _promiseFollowersoff: MessageIdEvent;
+  _promiseSubscribersoff: MessageIdEvent;
+
+}
+
+export interface ClientEventMap extends InternalEvents {
   "action": ActionEvent;
   "ban": BanEvent;
   "chat": ChatEvent;
@@ -238,13 +286,16 @@ export interface ClientEventMap {
   "ping": PingEvent;
   "pong": PongEvent;
   "r9kbeta": R9kbetaEvent;
+  "r9kmode": R9kbetaEvent;
   "reconnect": ReconnectEvent;
   "resub": ResubEvent;
   "roomstate": RoomstateEvent;
   "serverchange": ServerChangeEvent;
   "slowmode": SlowModeEvent;
+  "subscriber": SubscribersEvent;
   "subscribers": SubscribersEvent;
   "subscription": SubscriptionEvent;
+  "subanniversary": ResubEvent;
   "timeout": TimeoutEvent;
   "unhost": UnhostEvent;
   "unmod": UnmodEvent;

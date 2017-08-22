@@ -48,6 +48,10 @@ export interface ClearChannelsAction {
 export interface IncrementReconnectionsAction {
   type: "[Connection] Increment Reconnections";
 }
+export interface ShouldReconnectAction {
+  type: "[Connection] Set shouldReconnect Status";
+  payload: boolean;
+}
 export interface ResetReconnectionsAction {
   type: "[Connection] Reset Reconnections";
 }
@@ -91,6 +95,7 @@ export type ChannelActionTypes =
 export type ConnectionActionTypes =
   IncrementReconnectionsAction |
   ResetReconnectionsAction |
+  ShouldReconnectAction |
   SetLatencyBaseAction |
   SetCurrentLatencyAction |
   CloseConnectionAction |

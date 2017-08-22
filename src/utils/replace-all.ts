@@ -1,9 +1,9 @@
-export function replaceAll(str: string, obj: any): string {
+export const replaceAll = (str: string, obj: {[key: string]: string}): string => {
   if (str === null || typeof str === "undefined") { return null; }
-  for (const x in obj) {
+  for (let x in obj) {
     if (obj.hasOwnProperty(x)) {
       str = str.replace(new RegExp(x, "g"), obj[x]);
     }
   }
   return str;
-}
+};

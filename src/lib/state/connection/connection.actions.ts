@@ -1,7 +1,7 @@
 import {
   CloseConnectionAction, IncrementReconnectionsAction, ResetReconnectionsAction, SetCurrentLatencyAction,
   SetLatencyBaseAction,
-  SetReconnectTimerAction
+  SetReconnectTimerAction, ShouldReconnectAction
 } from '../state.types';
 
 export function setLatencyBase(latency: Date): SetLatencyBaseAction {
@@ -16,6 +16,14 @@ export function incrementReconnections(): IncrementReconnectionsAction {
     type: '[Connection] Increment Reconnections'
   };
 }
+
+export function setShouldReconnect(payload: boolean): ShouldReconnectAction {
+  return {
+    type: '[Connection] Set shouldReconnect Status',
+    payload
+  };
+}
+
 export function resetReconnections(): ResetReconnectionsAction {
   return {
     type: '[Connection] Reset Reconnections'

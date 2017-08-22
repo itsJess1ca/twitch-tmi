@@ -20,7 +20,7 @@ client.on('connecting')
   console.log(event.address);
 });
 
-client.on('ping')
+/*client.on('ping')
 .subscribe(event => {
   console.log('ping event: ', event);
 });
@@ -28,7 +28,7 @@ client.on('ping')
 client.on('pong')
 .subscribe(event => {
   console.log('pong event: ', event);
-});
+});*/
 
 client.on('mod')
 .subscribe(event => {

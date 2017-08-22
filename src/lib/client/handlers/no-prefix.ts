@@ -12,14 +12,14 @@ export function HandleNoPrefixMessage(message: ParsedMessage, event$: Subject<an
       if (ws !== null && ws.readyState !== 2 && ws.readyState !== 3) {
         ws.send("PONG");
       }
-      event$.next(buildEvent('ping', {}));
+      event$.next(buildEvent('ping', {}, message.raw));
     },
     "PONG": () => {
       const currDate = new Date();
       const currentLatency = (currDate.getTime() - store.get('connection').currentLatency) / 1000;
       store.dispatch('connection', setCurrentLatency(currentLatency));
 
-      event$.next(buildEvent('pong', {latency: currentLatency}));
+      event$.next(buildEvent('pong', {latency: currentLatency}, message.raw));
 
       clearTimeout(store.get('core').pingTimeout);
     }

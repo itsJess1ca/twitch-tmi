@@ -1,6 +1,7 @@
 import { ChannelActionTypes, ConnectionActionTypes } from '../state.types';
 
 export interface ConnectionState {
+  shouldReconnect: boolean;
   latency: Date;
   currentLatency: number;
   wasCloseCalled: boolean;
@@ -9,6 +10,7 @@ export interface ConnectionState {
 }
 
 export const CONNECTION_INITIAL_STATE: ConnectionState = {
+  shouldReconnect: true,
   latency: new Date(),
   currentLatency: 0,
   wasCloseCalled: false,
@@ -23,6 +25,9 @@ export function connectionReducer(s: ConnectionState = CONNECTION_INITIAL_STATE,
 
     case "[Connection] Reset Reconnections":
       return Object.assign({}, s, {reconnections: 0});
+
+    case "[Connection] Set shouldReconnect Status":
+      return Object.assign({}, s, {shouldReconnect: action.payload});
 
     case "[Connection] Set Latency Base":
       return Object.assign({}, s, {latency: action.payload});

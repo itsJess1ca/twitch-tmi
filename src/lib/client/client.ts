@@ -90,7 +90,7 @@ export function Client(opts: ClientOptions): ClientInterface {
       }
     })
     .subscribe((message) => {
-      console.log(message);
+      // console.log(message);
     });
 
 
