@@ -458,7 +458,39 @@ export function HandleTmiMessage(message: ParsedMessage, connectionSettings, eve
     },
 
     "CLEARCHAT": () => {
-      //TODO
+      if (message.params.length > 1) {
+        // User has been banned or timed out by a mod
+        const duration = fallback(message.tags['ban-duration'], null);
+        const reason = replaceAll(fallback(message.tags['ban-duration'], null), {
+          "\\\\s": " ",
+          "\\\\:": ";",
+          "\\\\\\\\": "\\",
+          "\\r": "\r",
+          "\\n": "\n"
+        });
+
+        if (duration === null) {
+          logger.info(`[${message.channel}] ${message.content} has been banned. Reason: ${reason || "n/a"}`);
+          __event$__.next(buildEvent('ban', {
+            channel: message.channel,
+            username: message.content,
+            reason
+          }, message.raw));
+        } else {
+          logger.info(`[${message.channel}] ${message.content} has been timed out for ${duration} seconds. Reason: ${reason || "n/a"}`);
+          __event$__.next(buildEvent('timeout', {
+            channel: message.channel,
+            username: message.content,
+            reason,
+            duration: ~~duration
+          }, message.raw));
+        }
+      } else {
+        // Chat was cleared by a moderator
+        logger.info(`[${message.channel}] Chat was cleared by a moderator.`);
+        __event$__.next(buildEvent('clearchat', {channel: message.channel}, message.raw));
+        __event$__.next(buildEvent('_promiseClear', {}, message.raw));
+      }
     },
 
     "RECONNECT": () => {
