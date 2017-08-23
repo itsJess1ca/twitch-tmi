@@ -1,4 +1,4 @@
-import { ClientConnect, ws } from './client.connect';
+import { ClientConnect, __ws__ } from './client.connect';
 import { fallback } from '../../utils/fallback';
 import { justinfan } from '../../utils/justinfan';
 import { ParsedMessage, parseMessage } from '../parser/message';
@@ -16,7 +16,7 @@ import { createStore } from '../state/create-store';
 import { coreReducer } from '../state/core/core.reducer';
 import { handleJtvMessages } from './handlers/jtv-messages';
 import { handleOtherMessages } from './handlers/other-messages';
-import { setChannels, setLoggingLevel } from '../state/core/core.actions';
+import { setChannels, setLoggingLevel, setOptions } from '../state/core/core.actions';
 import { channelReducer } from '../state/channel/channel.reducer';
 import { connectionReducer } from '../state/connection/connection.reducer';
 import { closeConnection } from '../state/connection/connection.actions';
@@ -62,6 +62,8 @@ export function Client(opts: ClientOptions): ClientInterface {
     options: fallback(opts.options, {})
   } as ClientOptions;
 
+  store.dispatch('core', setOptions(Object.assign({}, opts, options)));
+
   // Override Logger if set
   if (opts.logger) {
     for (const fn in opts.logger) {
@@ -71,7 +73,6 @@ export function Client(opts: ClientOptions): ClientInterface {
     }
   }
 
-  store.dispatch('core', setChannels(opts.channels));
   logger.setLoggingLevel(fallback(opts.loggingLevel, 'info'));
 
   message$
@@ -82,7 +83,7 @@ export function Client(opts: ClientOptions): ClientInterface {
       if (message.prefix === null) {
         HandleNoPrefixMessage(message, __event$__);
       } else if (message.prefix === "tmi.twitch.tv") {
-        HandleTmiMessage(message, opts.connection, __event$__);
+        HandleTmiMessage(message, __event$__);
       } else if (message.prefix === "jtv") {
         handleJtvMessages(message, __event$__);
       } else {
@@ -94,10 +95,10 @@ export function Client(opts: ClientOptions): ClientInterface {
     });
 
   const disconnect = async (): Promise<void> => {
-    if (ws !== null && ws.readyState !== 3) {
+    if (__ws__ !== null && __ws__.readyState !== 3) {
       store.dispatch('connection', closeConnection(true));
       console.log('Disconnecting From Server');
-      ws.close();
+      __ws__.close();
     } else {
       console.error(CannotCloseWS);
       throw new Error(CannotCloseWS);

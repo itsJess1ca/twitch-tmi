@@ -156,10 +156,10 @@ export interface ResubEvent {
 export interface RoomstateEvent {
   channel: string;
   state: {
-    'broadcaster-lang': string | null;
-    r9k: boolean;
-    slow: boolean;
-    'subs-only': boolean;
+    'broadcaster-lang'?: string | null;
+    r9k?: boolean;
+    slow?: boolean;
+    'subs-only'?: boolean;
     channel: string;
   };
 }
@@ -274,6 +274,7 @@ export interface ClientEventMap extends InternalEvents {
   "disconnected": DisconnectedEvent;
   "emoteonly": EmoteOnlyEvent;
   "emotesets": EmoteSetsEvent;
+  "followersmode": FollowersOnlyEvent;
   "followersonly": FollowersOnlyEvent;
   "hosted": HostedEvent;
   "hosting": HostingEvent;
@@ -293,6 +294,7 @@ export interface ClientEventMap extends InternalEvents {
   "resub": ResubEvent;
   "roomstate": RoomstateEvent;
   "serverchange": ServerChangeEvent;
+  "slow": SlowModeEvent;
   "slowmode": SlowModeEvent;
   "subscriber": SubscribersEvent;
   "subscribers": SubscribersEvent;

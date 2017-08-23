@@ -1,8 +1,11 @@
 import { LoggingLevels } from '../../logger';
 import {
-  SetChannelsAction, SetLoggingLevelAction, SetPingLoopAction, SetPingTimeoutAction,
+  SetChannelsAction, SetEmoteSetsAction, SetLastJoinedChannelAction, SetLoggingLevelAction, SetOptionsAction,
+  SetPingLoopAction,
+  SetPingTimeoutAction, SetRawEmotesStringAction,
   SetUsernameAction
 } from '../state.types';
+import { ClientOptions } from '../../client/client';
 
 export function setUsername(payload: string): SetUsernameAction {
   return {
@@ -10,6 +13,20 @@ export function setUsername(payload: string): SetUsernameAction {
     username: payload
   };
 }
+export function setOptions(options: ClientOptions): SetOptionsAction {
+  return {
+    type: "[Core] Set Options",
+    options
+  };
+}
+
+export function setLastJoinedChannel(channel: string): SetLastJoinedChannelAction {
+  return {
+    type: '[Core] Set Last Joined Channel',
+    channel
+  };
+}
+
 export function setChannels(payload: string[]): SetChannelsAction {
   return {
     type: "[Core] Set Channels",
@@ -32,5 +49,24 @@ export function setLoggingLevel(level: LoggingLevels): SetLoggingLevelAction {
   return {
     type: "[Core] Set Logging Level",
     level: level
+  };
+}
+
+export function setRawEmotesString(emotes: string): SetRawEmotesStringAction {
+  return {
+    type: '[Core] Set Raw EmoteSets String',
+    payload: emotes
+  };
+}
+
+export function setEmoteSets(emoteSets: {
+  [key: string]: [{
+    code: string;
+    id: number;
+  }]
+}): SetEmoteSetsAction {
+  return {
+    type: '[Core] Set EmoteSets',
+    payload: emoteSets
   };
 }

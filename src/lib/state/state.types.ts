@@ -1,4 +1,6 @@
 // Core Types
+import { ClientOptions } from '../client/client';
+
 export interface SetUsernameAction {
   type: "[Core] Set Username";
   username: string;
@@ -6,6 +8,14 @@ export interface SetUsernameAction {
 export interface SetChannelsAction {
   type: "[Core] Set Channels";
   channels: string[];
+}
+export interface SetOptionsAction {
+  type: "[Core] Set Options";
+  options: ClientOptions;
+}
+export interface SetLastJoinedChannelAction {
+  type: "[Core] Set Last Joined Channel";
+  channel: string;
 }
 export interface SetPingTimeoutAction {
   type: "[Core] Set Ping Timeout";
@@ -19,8 +29,24 @@ export interface SetLoggingLevelAction {
   type: "[Core] Set Logging Level";
   level: string;
 }
+export interface SetRawEmotesStringAction {
+  type: "[Core] Set Raw EmoteSets String";
+  payload: string;
+}export interface SetEmoteSetsAction {
+  type: "[Core] Set EmoteSets";
+  payload: {
+    [key: string]: [{
+      code: string;
+      id: number;
+    }]
+  };
+}
 
 // Channel Types
+export interface AddChannelAction {
+  type: "[Channel] Add Channel";
+  channel: string;
+}
 export interface AddModeratorAction {
   type: "[Channel] Add Moderator";
   payload: {
@@ -42,6 +68,11 @@ export interface SetUserStateAction {
 
 export interface ClearChannelsAction {
   type: "[Channel] Clear Channels";
+}
+
+export interface ClearModeratorsAction {
+  type: "[Channel] Clear Moderators";
+  channel: string;
 }
 
 // Connection Types
@@ -80,15 +111,21 @@ export interface OtherAction {
 export type CoreActionTypes =
   SetUsernameAction |
   SetChannelsAction |
+  SetLastJoinedChannelAction |
+  SetOptionsAction |
   SetPingTimeoutAction |
   SetPingLoopAction |
   SetLoggingLevelAction |
+  SetRawEmotesStringAction |
+  SetEmoteSetsAction |
   OtherAction;
 
 export type ChannelActionTypes =
+  AddChannelAction |
   AddModeratorAction |
   RemoveModeratorAction |
   SetUserStateAction |
+  ClearModeratorsAction |
   ClearChannelsAction |
   OtherAction;
 

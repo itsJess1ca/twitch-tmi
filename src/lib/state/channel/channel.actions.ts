@@ -1,7 +1,15 @@
 import {
-  AddModeratorAction, ClearChannelsAction, RemoveModeratorAction,
+  AddChannelAction,
+  AddModeratorAction, ClearChannelsAction, ClearModeratorsAction, RemoveModeratorAction,
   SetUserStateAction
 } from '../state.types';
+
+export function addChannel(channel: string): AddChannelAction {
+  return {
+    type: '[Channel] Add Channel',
+    channel
+  };
+}
 
 export function addModerator(channel: string, names: string | string[]): AddModeratorAction {
   return {
@@ -20,6 +28,13 @@ export function removeModerator(channel: string, names: string | string[]): Remo
       channel,
       names
     }
+  };
+}
+
+export function clearModerators(channel: string): ClearModeratorsAction {
+  return {
+    type: "[Channel] Clear Moderators",
+    channel
   };
 }
 

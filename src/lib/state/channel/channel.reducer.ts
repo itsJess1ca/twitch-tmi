@@ -15,6 +15,11 @@ export const CHANNEL_INITIAL_SUB_STATE: ChannelDefaultState = {moderators: [], u
 export function channelReducer(s: ChannelState = CHANNEL_INITIAL_STATE, action: ChannelActionTypes): ChannelState {
   let newState = Object.assign({}, s);
   switch (action.type) {
+    case "[Channel] Add Channel":
+      if (!newState[action.channel]) newState = initializeChannel(newState, action.channel);
+
+      return newState;
+
     case "[Channel] Add Moderator":
       if (!newState[action.payload.channel]) newState = initializeChannel(newState, action.payload.channel);
 
@@ -30,6 +35,20 @@ export function channelReducer(s: ChannelState = CHANNEL_INITIAL_STATE, action: 
       if (!newState[action.payload.channel]) newState = initializeChannel(newState, action.payload.channel);
       newState[action.payload.channel] = Object.assign({}, newState[action.payload.channel], {
         moderators: newState[action.payload.channel].moderators.filter(mod => !action.payload.names.includes(mod))
+      });
+      return newState;
+
+    case "[Channel] Clear Moderators":
+      if (!newState[action.channel]) newState = initializeChannel(newState, action.channel);
+      newState[action.channel] = Object.assign({}, newState[action.channel], {
+        moderators: []
+      });
+      return newState;
+
+    case "[Channel] Set User State":
+      if (!newState[action.payload.channel]) newState = initializeChannel(newState, action.payload.channel);
+      newState[action.payload.channel] = Object.assign({}, newState[action.payload.channel], {
+        userstate: action.payload
       });
       return newState;
 

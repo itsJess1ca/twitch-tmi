@@ -2,18 +2,28 @@ import { ParsedMessage } from '../../parser/message';
 import { noop } from '../../../utils/noop';
 import { fallback } from '../../../utils/fallback';
 import { __event$__, ClientOptions, store } from '../client';
-import { setPingLoop, setPingTimeout, setUsername } from '../../state/core/core.actions';
+import {
+  setEmoteSets, setLastJoinedChannel, setPingLoop, setPingTimeout,
+  setUsername
+} from '../../state/core/core.actions';
 import { Timer } from '../../timer.class';
 import { formatChannelName } from '../../../utils/channel';
 import { closeConnection, setShouldReconnect } from '../../state/connection/connection.actions';
 import { Subject } from 'rxjs/Subject';
-import { ClientEventMap, InternalEvents, KnownMsgIds, UserState } from '../event-types';
+import { ClientEventMap, InternalEvents, KnownMsgIds, RoomstateEvent, UserState } from '../event-types';
 import { logger } from '../../logger';
 import { buildEvent } from '../../../utils/build-event';
 import { replaceAll } from '../../../utils/replace-all';
 import { __ws__ } from '../client.connect';
+import {
+  addChannel, addModerator, clearChannels, clearModerators,
+  setUserState
+} from '../../state/channel/channel.actions';
+import { isJustinfan } from '../../../utils/type-checks';
+import { getEmoteSets } from '../../twitch-api/get-emote-sets';
 
-export function HandleTmiMessage(message: ParsedMessage, connectionSettings, event$: Subject<any>): void {
+export function HandleTmiMessage(message: ParsedMessage, event$: Subject<any>): void {
+  const opts = () => store.get('core').options;
   const commands = {
     "002": noop,
     "003": noop,
@@ -28,8 +38,8 @@ export function HandleTmiMessage(message: ParsedMessage, connectionSettings, eve
     "372": () => {
       console.log('connected to server');
       event$.next(buildEvent('connected', {
-        port: connectionSettings.port,
-        address: connectionSettings.server
+        port: opts().connection.port,
+        address: opts().connection.server
       }, message.raw));
       event$.next(buildEvent('_promiseConnect', {}, message.raw));
       const pingLoop = setInterval(() => {
@@ -47,14 +57,15 @@ export function HandleTmiMessage(message: ParsedMessage, connectionSettings, eve
             clearInterval(pingLoop);
             clearTimeout(pingTimeout);
           }
-        }, fallback(connectionSettings.timeout, 9999));
+        }, fallback(opts().connection.timeout, 9999));
         store.dispatch('core', setPingTimeout(pingTimeout));
       }, 60000);
       store.dispatch('core', setPingLoop(pingLoop));
+      store.dispatch('channel', clearChannels());
 
       const joinQueue = new Timer(2000);
       // console.log(channels);
-      for (const channel of store.get('core').channels) {
+      for (const channel of opts().channels) {
         joinQueue.add(function (channel) {
           if (__ws__ !== null && __ws__.readyState !== 2 && __ws__.readyState !== 3) {
             __ws__.send(`JOIN ${formatChannelName(channel)}`);
@@ -500,15 +511,117 @@ export function HandleTmiMessage(message: ParsedMessage, connectionSettings, eve
     },
 
     "USERSTATE": () => {
-      //TODO
+      message.tags['username'] = opts().identity.username;
+
+      if (message.tags['user-type'] === 'mod') {
+        const lastJoinedChannel = store.get('core').lastJoinedChannel;
+        if (!store.get('channel')[lastJoinedChannel]) { store.dispatch('channel', clearModerators(lastJoinedChannel)); }
+        if (store.get('channel')[lastJoinedChannel].moderators.indexOf(opts().identity.username) < 0) {
+          store.dispatch('channel', addModerator(lastJoinedChannel, opts().identity.username));
+        }
+      }
+
+      if (!isJustinfan(opts().identity.username) && !store.get('channel')[message.channel].userstate) {
+        store.dispatch('channel', setUserState(message.channel, message.tags));
+        store.dispatch('core', setLastJoinedChannel(message.channel));
+        store.dispatch('channel', addChannel(message.channel));
+        logger.info(`Joined ${message.channel}`);
+        __ws__.next(buildEvent('join', {
+          username: opts().identity.username,
+          channel: message.channel,
+          self: true
+        }, message.raw));
+      }
+
+      if (message.tags["emote-sets"] !== store.get('core').emoteSets) {
+        getEmoteSets(message.tags['emote-sets'])
+          .do(response => store.dispatch('core', setEmoteSets(response.emoticon_sets)))
+          .subscribe();
+      }
     },
 
     "GLOBALUSERSTATE": () => {
-      //TODO
+      store.dispatch('channel', setUserState('__global__', message.tags));
+
+      if (typeof message.tags['emote-sets'] !== 'undefined') {
+        getEmoteSets(message.tags['emote-sets'])
+          .do(response => store.dispatch('core', setEmoteSets(response.emoticon_sets)))
+          .subscribe();
+      }
     },
 
     "ROOMSTATE": () => {
-      //TODO
+      // Received when joining a channel and every time one of the chat room settings (ie: slow mode, subonly, etc) changes.
+      // The message on join contains all room settings
+
+      // Emit that we successfully joined the room
+      if (formatChannelName(store.get('core').lastJoinedChannel) === formatChannelName(message.params[0])) {
+        __event$__.next(buildEvent('_promiseJoin', {}, message.raw));
+      }
+
+      message.tags['channel'] = formatChannelName(message.params[0]);
+      __event$__.next(buildEvent('roomstate', {state: message.tags, channel: message.params[0]} as RoomstateEvent, message.raw));
+
+      if (message.tags.hasOwnProperty('slow') && !message.tags.hasOwnProperty('subs-only')) {
+        if (typeof message.tags['slow'] === 'boolean') {
+          logger.info(`[${message.channel}] This room is no longer in slow mode`);
+          __event$__.next(buildEvent('slow', {
+            enabled: false,
+            length: 0,
+            channel: message.channel
+          }, message.raw));
+          __event$__.next(buildEvent('slowmode', {
+            enabled: false,
+            length: 0,
+            channel: message.channel
+          }, message.raw));
+          __event$__.next(buildEvent('_promiseSlowoff', {}, message.raw));
+        } else {
+          logger.info(`[${message.channel}] This room is now in slow mode.`);
+          const length = ~~message.tags['slow'];
+          __event$__.next(buildEvent('slow', {
+            enabled: true,
+            length: length,
+            channel: message.channel
+          }, message.raw));
+          __event$__.next(buildEvent('slowmode', {
+            enabled: true,
+            length: length,
+            channel: message.channel
+          }, message.raw));
+          __event$__.next(buildEvent('_promiseSlowoff', {}, message.raw));
+        }
+      }
+
+      if (message.tags.hasOwnProperty('followers-only') && !message.tags.hasOwnProperty('subs-only')) {
+        if (message.tags['followers-only'] === '-1') {
+          logger.info(`[${message.channel}] This room is no longer in followers-only mode`);
+          __event$__.next(buildEvent('followersonly', {
+            channel: message.channel,
+            length: 0,
+            enabled: false
+          }, message.raw));
+          __event$__.next(buildEvent('followersmode', {
+            channel: message.channel,
+            length: 0,
+            enabled: false
+          }, message.raw));
+          __event$__.next(buildEvent('_promiseFollowersoff', {}, message.raw));
+        } else {
+          const minutes = ~~message.tags['followers-only'];
+          __event$__.next(buildEvent('followersonly', {
+            channel: message.channel,
+            length: minutes,
+            enabled: true
+          }, message.raw));
+          __event$__.next(buildEvent('followersmode', {
+            channel: message.channel,
+            length: minutes,
+            enabled: false
+          }, message.raw));
+          __event$__.next(buildEvent('_promiseFollowersoff', {}, message.raw));
+        }
+      }
     }
   };
   commands[message.command] ? commands[message.command]() : (() => {
