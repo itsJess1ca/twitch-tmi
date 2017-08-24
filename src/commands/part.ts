@@ -1,5 +1,5 @@
 import { ClientInterface } from '../client/client.interface';
-import { formatChannelName } from '../../../utils/channel';
+import { formatChannelName } from '../utils/channel';
 import { __event$__ } from '../client/client';
 
 export function part(client: ClientInterface, channel: string) {

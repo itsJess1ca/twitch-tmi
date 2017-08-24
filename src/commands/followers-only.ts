@@ -1,5 +1,5 @@
 import { ClientInterface } from '../client/client.interface';
-import { fallback } from '../../../utils/fallback';
+import { fallback } from '../utils/fallback';
 import { __event$__ } from '../client/client';
 
 export function followersOnly(client: ClientInterface, channel: string, minutes: number) {

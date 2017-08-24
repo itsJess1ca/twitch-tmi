@@ -1,4 +1,4 @@
-import { formatChannelName } from '../../../utils/channel';
+import { formatChannelName } from '../utils/channel';
 import { __sendMessage } from '../client/client.send-message';
 
 export function sayAction(channel: string, message: string) {
