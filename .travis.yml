@@ -9,27 +9,20 @@ cache:
   - node_modules
 
 node_js:
-- '7.6.0'
+  - '7'
+  - '6'
+  - '4'
 
 before_script:
-- npm run build
-- ls
+  - npm prune
 script: npm run ci
+after_success:
+  - npm run semantic-release
+branches:
+  except:
+    - /^v\d+\.\d+\.\d+$/
 
 notifications:
   email:
     on_success: change
     on_failure: change
-  slack:
-    rooms:
-      #
-      # Send to sustainable nutrition slack room
-      #
-      # Generate with
-      # travis encrypt "j3ds:<token>#sustainable-nutrition" --add notifications.slack.rooms
-      # where <token> is from the Slack integration settings.
-      secure: "KZiT3WANLvPga/S6lgn9/eCxrwrHCqmeUCrxW2TYkelcrZ+kOHwueg5aSCjvBsmDeHwkIduz8DlB0wCXRWjaYmu7LmzPLYWhTdSyN6xKKXfm6q+LWVGW/97anXpAndzGtPJzdOF7Q19XVqCKRpyVErIwYjIBWoV4x
-      bZM64bOZMxkRD/pRj6aM8ViSY+bKlm+imfyfxYqGV5kSgMHLom+7FZ579/cY/pe9jcGNn2tzrYx9pVC5pUFbz6y94fJWgcb7vu4FhWQSeu009aHDv20gmhGX3tjCUQPWAHWl2PbuVBv7kc1dwvpsNGXrQksw56Jt3gwYlU50MD7A
-      G/aB9NZxT0vkkx9YQurXfzhaG+3vNXB/PrG5fCthtVqAwe9vskgl2rPR7Telp7vCxMFYsSS+sNJA/Sl6ENqkZdeG1VFGQc05jdZrK1FYVQGZznrPSqjyWOL0A7g7BNrVGSX35w2n8mZLqUXUT0jpL6gbhRBsiAaPOjeaIeK+/lt6
-      Yro8qT/PBo1G1n0jw7RzkBTrGhPncI3yhcQKWBdOTgp9V3/ahjtxCOnh8E/sqQfkb/ddslC5e5zwuNkRiK3Aj5M6P3ZpqxZoyMWih9rDj6D3XJ7XBWeJdsD/TkbUskHdTVjJ60ozJRne8rd31N3+dPVqNcYA1Occcp5YAuzc/2Wg
-      HcIprw="
