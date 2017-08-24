@@ -9,19 +9,19 @@ import { logger } from '../../logger';
 export function handleOtherMessages(message: ParsedMessage, event$: Subject<any>) {
   const commands = {
     "353" : () => {
-      console.log(message.params[2], message.params[3].split(" "));
+      logger.info(message.params[2], message.params[3].split(" "));
     },
     "JOIN": () => {
       if (isJustinfan(store.get('core').username) && store.get('core').username === message.prefix.split("!")[0]) {
         // Joined the channel as a justinfan user
 
-        console.log(`Joined ${message.channel}`);
+        logger.info(`Joined ${message.channel}`);
       }
 
       if (store.get('core').username !== message.prefix.split("!")[0]) {
         // Someone else joined the channel, just emit the join event..
 
-        console.log(`${message.prefix.split("!")[0]} Joined ${message.channel}`);
+        logger.info(`${message.prefix.split("!")[0]} Joined ${message.channel}`);
       }
     },
     "PRIVMSG": () => {

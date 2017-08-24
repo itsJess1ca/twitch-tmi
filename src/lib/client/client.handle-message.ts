@@ -7,6 +7,7 @@ import { __ws__ } from './client.connect';
 import { noop } from '../../utils/noop';
 import { Timer } from '../timer.class';
 import { isJustinfan } from '../../utils/type-checks';
+import { logger } from '../logger';
 
 let username;
 
@@ -56,11 +57,11 @@ export function ClientHandleMessage(message: ParsedMessage) {
         }
       },
       "PONG": () => {
-        console.log('pong');
+        logger.info('pong');
       }
     };
     commands[message.command] ? commands[message.command]() : (() => {
-      console.log(`Could not parse message with no prefix: 
+      logger.info(`Could not parse message with no prefix: 
        ${JSON.stringify(message, null, 2)}
       `);
     })();
@@ -75,12 +76,12 @@ export function ClientHandleMessage(message: ParsedMessage) {
 
       // Retrieve username from server..
       "001": () => {
-        console.log('username: ', message.params[0]);
+        logger.info('username: ', message.params[0]);
         username = message.params[0];
       },
 
       "372": () => {
-        console.log('connected to server');
+        logger.info('connected to server');
         const pingLoop = setInterval(() => {
           // Make sure the connection is opened before sending the message..
           if (__ws__ !== null && __ws__.readyState !== 2 && __ws__.readyState !== 3) {
@@ -100,11 +101,11 @@ export function ClientHandleMessage(message: ParsedMessage) {
         }, 60000);
 
         /*const joinQueue = new Timer(2000);
-        // console.log(channels);
+        // logger.info(channels);
         for (const channel of channels) {
           joinQueue.add(function (channel) {
             if (ws !== null && ws.readyState !== 2 && ws.readyState !== 3) {
-              console.log(channel);
+              logger.info(channel);
               ws.send(`JOIN ${formatChannelName(channel)}`);
             }
           }.bind(this, channel));
@@ -143,7 +144,7 @@ export function ClientHandleMessage(message: ParsedMessage) {
       }
     };
     commands[message.command] ? commands[message.command]() : (() => {
-      console.log(`Could not parse message from tmi.twitch.tv: 
+      logger.info(`Could not parse message from tmi.twitch.tv: 
        ${JSON.stringify(message, null, 2)}
       `);
     })();
@@ -158,26 +159,26 @@ export function ClientHandleMessage(message: ParsedMessage) {
       }
     };
     commands[message.command] ? commands[message.command]() : (() => {
-      console.log(`Could not parse message from jtv: 
+      logger.info(`Could not parse message from jtv: 
        ${JSON.stringify(message, null, 2)}
       `);
     })();
   } else {
     const commands = {
       "353" : () => {
-        console.log(message.params[2], message.params[3].split(" "));
+        logger.info(message.params[2], message.params[3].split(" "));
       },
       "JOIN": () => {
         if (isJustinfan(username) && username === message.prefix.split("!")[0]) {
           // Joined the channel as a justinfan user
           
-          console.log(`Joined ${chan}`);
+          logger.info(`Joined ${chan}`);
         }
 
         if (username !== message.prefix.split("!")[0]) {
           // Someone else joined the channel, just emit the join event..
 
-          console.log(`${message.prefix.split("!")[0]} Joined ${chan}`);
+          logger.info(`${message.prefix.split("!")[0]} Joined ${chan}`);
         }
       },
       "PRIVMSG": () => {
@@ -213,7 +214,7 @@ export function ClientHandleMessage(message: ParsedMessage) {
               // Message is a regular chat message..
 
               message.tags["message-type"] = "chat";
-              console.log(`[${chan}] <${message.tags['username']}>: ${msg}`);
+              logger.info(`[${chan}] <${message.tags['username']}>: ${msg}`);
             }
           }
         }

@@ -37,6 +37,8 @@ export const store = createStore({
 export let __event$__;
 
 export function Client(opts: ClientOptions): ClientInterface {
+  logger.setLoggingLevel(fallback(opts.loggingLevel, 'info'));
+
   opts.connection = fallback(opts.connection, {});
   opts.identity = fallback(opts.identity, {});
 
@@ -74,7 +76,6 @@ export function Client(opts: ClientOptions): ClientInterface {
     }
   }
 
-  logger.setLoggingLevel(fallback(opts.loggingLevel, 'info'));
 
   message$
     .do(logger.trace)
@@ -92,16 +93,16 @@ export function Client(opts: ClientOptions): ClientInterface {
       }
     })
     .subscribe((message) => {
-      // console.log(message);
+      // logger.info(message);
     });
 
   const disconnect = async (): Promise<void> => {
     if (__ws__ !== null && __ws__.readyState !== 3) {
       store.dispatch('connection', closeConnection(true));
-      console.log('Disconnecting From Server');
+      logger.info('Disconnecting From Server');
       __ws__.close();
     } else {
-      console.error(CannotCloseWS);
+      logger.error(CannotCloseWS);
       throw new Error(CannotCloseWS);
     }
   };

@@ -36,7 +36,7 @@ export function HandleTmiMessage(message: ParsedMessage, event$: Subject<any>): 
     "001": () => store.dispatch('core', setUsername(message.params[0])),
 
     "372": () => {
-      console.log('connected to server');
+      logger.info('connected to server');
       event$.next(buildEvent('connected', {
         port: opts().connection.port,
         address: opts().connection.server
@@ -64,7 +64,7 @@ export function HandleTmiMessage(message: ParsedMessage, event$: Subject<any>): 
       store.dispatch('channel', clearChannels());
 
       const joinQueue = new Timer(2000);
-      // console.log(channels);
+      // logger.info(channels);
       for (const channel of opts().channels) {
         joinQueue.add(function (channel) {
           if (__ws__ !== null && __ws__.readyState !== 2 && __ws__.readyState !== 3) {
