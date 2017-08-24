@@ -19,7 +19,7 @@ export interface CoreState {
   };
 }
 
-export const CORE_INITIAL_STATE: CoreState = {username: null, channels: [], loggingLevel: "info"};
+export const CORE_INITIAL_STATE: CoreState = {username: null, channels: [], loggingLevel: "info", emoteSets: {}};
 
 export function coreReducer(s: CoreState = CORE_INITIAL_STATE, action: CoreActionTypes): CoreState {
   switch (action.type) {
