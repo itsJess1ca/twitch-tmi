@@ -521,7 +521,8 @@ export function HandleTmiMessage(message: ParsedMessage, event$: Subject<any>): 
         }
       }
 
-      if (!isJustinfan(opts().identity.username) && !store.get('channel')[message.channel].userstate) {
+      const channelStore = store.get('channel')[message.channel];
+      if (!isJustinfan(opts().identity.username) && (!channelStore || !channelStore.userstate)) {
         store.dispatch('channel', setUserState(message.channel, message.tags));
         store.dispatch('core', setLastJoinedChannel(message.channel));
         store.dispatch('channel', addChannel(message.channel));
