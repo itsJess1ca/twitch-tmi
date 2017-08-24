@@ -4,7 +4,7 @@ import { addModerator, removeModerator } from '../../state/channel/channel.actio
 import { Subject } from "rxjs/Subject";
 import { ClientEventMap } from '../event-types';
 import { logger } from '../../logger';
-import { buildEvent } from '../../../utils/build-event';
+import { buildEvent } from '../../utils/build-event';
 
 export function handleJtvMessages(message: ParsedMessage, event$: Subject<any>) {
   const commands = {

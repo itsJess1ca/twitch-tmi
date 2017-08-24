@@ -1,4 +1,4 @@
-import { unescapeHtml } from '../../utils/unescape-html';
+import { unescapeHtml } from '../utils/unescape-html';
 
 export function emoteRegex(msg, code, id, obj) {
   const space = /\S+/g;

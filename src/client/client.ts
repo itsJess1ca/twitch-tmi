@@ -1,6 +1,6 @@
 import { ClientConnect, __ws__ } from './client.connect';
-import { fallback } from '../../utils/fallback';
-import { justinfan } from '../../utils/justinfan';
+import { fallback } from '../utils/fallback';
+import { justinfan } from '../utils/justinfan';
 import { ParsedMessage, parseMessage } from '../parser/message';
 import { SplitMessage } from './client.handle-message';
 import { Observable } from 'rxjs/Observable';
@@ -20,7 +20,7 @@ import { setChannels, setLoggingLevel, setOptions } from '../state/core/core.act
 import { channelReducer } from '../state/channel/channel.reducer';
 import { connectionReducer } from '../state/connection/connection.reducer';
 import { closeConnection } from '../state/connection/connection.actions';
-import { CannotCloseWS } from '../../utils/errors';
+import { CannotCloseWS } from '../utils/errors';
 import { ClientEventMap } from './event-types';
 import { logger, LoggingLevels } from '../logger';
 import { __sendCommand } from './client.send-command';

@@ -2,8 +2,8 @@ import * as request from 'request';
 import { CoreOptions, RequiredUriUrl, Headers } from 'request';
 import { Observable } from 'rxjs/Observable';
 import { store } from '../client/client';
-import { fallback } from '../../utils/fallback';
-import { isURL } from '../../utils/type-checks';
+import { fallback } from '../utils/fallback';
+import { isURL } from '../utils/type-checks';
 
 export function _TwitchApi<T>(options: TwitchApiOptions) {
   let url = options.url;

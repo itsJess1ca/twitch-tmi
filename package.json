@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "tmi-lowdown provides a simple interface to interact with a Twitch chat.",
   "main": "./build/index.js",
+  "module": "./build/index.js",
   "types": "./build/index.d.ts",
   "scripts": {
     "build": "npm run clean && npm run build:typescript",
@@ -18,7 +19,12 @@
     "prepublishOnly": "npm run build",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
-  "keywords": [],
+  "keywords": [
+    "twitch",
+    "tmi",
+    "irc",
+    "rxjs"
+  ],
   "author": "LayerOne <jed@layerone.io> (https://layerone.io)",
   "license": "MIT",
   "dependencies": {

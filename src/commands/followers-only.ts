@@ -1,6 +1,6 @@
-import { ClientInterface } from '../client.interface';
+import { ClientInterface } from '../client/client.interface';
 import { fallback } from '../../../utils/fallback';
-import { __event$__ } from '../client';
+import { __event$__ } from '../client/client';
 
 export function followersOnly(client: ClientInterface, channel: string, minutes: number) {
   return client.__sendCommand(channel, `/followers ${fallback(minutes, 30)}`, (resolve, reject) => {

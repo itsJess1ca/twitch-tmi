@@ -1,4 +1,4 @@
-import { ClientEventMap } from '../lib/client/event-types';
+import { ClientEventMap } from '../client/event-types';
 
 export const buildEvent = <MessageType extends keyof ClientEventMap>(
   type: MessageType,

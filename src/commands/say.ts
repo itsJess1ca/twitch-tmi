@@ -1,7 +1,7 @@
-import { formatChannelName } from '../../../utils/channel';
+import { formatChannelName } from '../utils/channel';
 import { sayAction } from './say-action';
-import { __sendCommand } from '../client.send-command';
-import { __sendMessage } from '../client.send-message';
+import { __sendCommand } from '../client/client.send-command';
+import { __sendMessage } from '../client/client.send-message';
 
 export function say(channel: string, message: string) {
   channel = formatChannelName(channel);

@@ -1,5 +1,5 @@
-import { formatChannelName } from '../../utils/channel';
-import { fallback } from '../../utils/fallback';
+import { formatChannelName } from '../utils/channel';
+import { fallback } from '../utils/fallback';
 import { parseBadges } from './badges';
 import { parseEmotes } from './emotes';
 

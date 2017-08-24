@@ -1,12 +1,12 @@
 import { parseEmotes } from '../parser/emotes';
 import { parseBadges } from '../parser/badges';
 import { ParsedMessage, parseMessage } from '../parser/message';
-import { fallback } from '../../utils/fallback';
-import { formatChannelName } from '../../utils/channel';
+import { fallback } from '../utils/fallback';
+import { formatChannelName } from '../utils/channel';
 import { __ws__ } from './client.connect';
-import { noop } from '../../utils/noop';
+import { noop } from '../utils/noop';
 import { Timer } from '../timer.class';
-import { isJustinfan } from '../../utils/type-checks';
+import { isJustinfan } from '../utils/type-checks';
 import { logger } from '../logger';
 
 let username;

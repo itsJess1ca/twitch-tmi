@@ -1,14 +1,14 @@
 import { ParsedMessage } from '../../parser/message';
-import { noop } from '../../../utils/noop';
+import { noop } from '../../utils/noop';
 import { __event$__, store } from '../client';
-import { isJustinfan } from '../../../utils/type-checks';
+import { isJustinfan } from '../../utils/type-checks';
 import { Subject } from 'rxjs/Subject';
 import { ClientEventMap, UserState } from '../event-types';
 import { logger } from '../../logger';
-import { buildEvent } from '../../../utils/build-event';
+import { buildEvent } from '../../utils/build-event';
 import { setChannels, setLastJoinedChannel } from '../../state/core/core.actions';
 import { addChannel, removeChannel, setUserState } from '../../state/channel/channel.actions';
-import { extractNumber } from '../../../utils/extract-number';
+import { extractNumber } from '../../utils/extract-number';
 
 export function handleOtherMessages(message: ParsedMessage, event$: Subject<any>) {
   const commands = {
@@ -144,5 +144,3 @@ export function handleOtherMessages(message: ParsedMessage, event$: Subject<any>
   };
   commands[message.command] ? commands[message.command]() : noop();
 }
-
-// TODO FINISH THIS FILE

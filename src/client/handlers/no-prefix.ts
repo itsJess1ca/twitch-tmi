@@ -4,7 +4,7 @@ import { store } from '../client';
 import { Subject } from "rxjs/Subject";
 import { setCurrentLatency } from '../../state/connection/connection.actions';
 import { logger } from '../../logger';
-import { buildEvent } from '../../../utils/build-event';
+import { buildEvent } from '../../utils/build-event';
 
 export function HandleNoPrefixMessage(message: ParsedMessage, event$: Subject<any>) {
   const commands = {

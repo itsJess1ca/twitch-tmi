@@ -1,6 +1,6 @@
-import { ClientInterface } from '../client.interface';
+import { ClientInterface } from '../client/client.interface';
 import { formatChannelName } from '../../../utils/channel';
-import { __event$__ } from '../client';
+import { __event$__ } from '../client/client';
 
 export function part(client: ClientInterface, channel: string) {
   return client.__sendCommand<string>(null, `PART ${formatChannelName(channel)}`, (resolve, reject) => {

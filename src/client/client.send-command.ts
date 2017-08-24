@@ -2,9 +2,9 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/fromPromise';
 import 'rxjs/add/operator/timeout';
 import { __ws__ } from './client.connect';
-import { formatChannelName } from '../../utils/channel';
+import { formatChannelName } from '../utils/channel';
 import { logger } from '../logger';
-import { promiseTimeout } from '../../utils/promise-timeout';
+import { promiseTimeout } from '../utils/promise-timeout';
 import { store } from './client';
 
 export function __sendCommand<T>(channel: string, command: string, callback: PromiseCB): Promise<T> {

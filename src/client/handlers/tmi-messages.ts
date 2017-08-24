@@ -1,27 +1,27 @@
 import { ParsedMessage } from '../../parser/message';
-import { noop } from '../../../utils/noop';
-import { fallback } from '../../../utils/fallback';
+import { noop } from '../../utils/noop';
+import { fallback } from '../../utils/fallback';
 import { __event$__, ClientOptions, store } from '../client';
 import {
   setEmoteSets, setLastJoinedChannel, setPingLoop, setPingTimeout,
   setUsername
 } from '../../state/core/core.actions';
 import { Timer } from '../../timer.class';
-import { formatChannelName } from '../../../utils/channel';
+import { formatChannelName } from '../../utils/channel';
 import { closeConnection, setShouldReconnect } from '../../state/connection/connection.actions';
 import { Subject } from 'rxjs/Subject';
 import { ClientEventMap, InternalEvents, KnownMsgIds, RoomstateEvent, UserState } from '../event-types';
 import { logger } from '../../logger';
-import { buildEvent } from '../../../utils/build-event';
-import { replaceAll } from '../../../utils/replace-all';
+import { buildEvent } from '../../utils/build-event';
+import { replaceAll } from '../../utils/replace-all';
 import { __ws__ } from '../client.connect';
 import {
   addChannel, addModerator, clearChannels, clearModerators,
   setUserState
 } from '../../state/channel/channel.actions';
-import { isJustinfan } from '../../../utils/type-checks';
+import { isJustinfan } from '../../utils/type-checks';
 import { getEmoteSets } from '../../twitch-api/get-emote-sets';
-import { mergeArrays } from '../../../utils/merge-arrays';
+import { mergeArrays } from '../../utils/merge-arrays';
 
 export function HandleTmiMessage(message: ParsedMessage, event$: Subject<any>): void {
   const opts = () => store.get('core').options;
@@ -512,6 +512,7 @@ export function HandleTmiMessage(message: ParsedMessage, event$: Subject<any>): 
     },
 
     "USERSTATE": () => {
+      console.log('message', message);
       message.tags['username'] = opts().identity.username;
 
       if (message.tags['user-type'] === 'mod') {

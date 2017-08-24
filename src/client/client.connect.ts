@@ -5,7 +5,7 @@ import { clearChannels } from '../state/channel/channel.actions';
 import { closeConnection, incrementReconnections, setReconnectTimer } from '../state/connection/connection.actions';
 import { ClientEventMap } from './event-types';
 import { logger } from '../logger';
-import { buildEvent } from '../../utils/build-event';
+import { buildEvent } from '../utils/build-event';
 
 export let __ws__;
 let options: ClientOptions;
