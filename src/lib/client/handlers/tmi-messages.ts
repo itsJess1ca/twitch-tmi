@@ -21,6 +21,7 @@ import {
 } from '../../state/channel/channel.actions';
 import { isJustinfan } from '../../../utils/type-checks';
 import { getEmoteSets } from '../../twitch-api/get-emote-sets';
+import { mergeArrays } from '../../../utils/merge-arrays';
 
 export function HandleTmiMessage(message: ParsedMessage, event$: Subject<any>): void {
   const opts = () => store.get('core').options;
@@ -65,7 +66,7 @@ export function HandleTmiMessage(message: ParsedMessage, event$: Subject<any>): 
 
       const joinQueue = new Timer(2000);
       // logger.info(channels);
-      for (const channel of opts().channels) {
+      for (const channel of mergeArrays(opts().channels, Object.keys(store.get('channel')).filter(key => key !== '__global__'))) {
         joinQueue.add(function (channel) {
           if (__ws__ !== null && __ws__.readyState !== 2 && __ws__.readyState !== 3) {
             __ws__.send(`JOIN ${formatChannelName(channel)}`);

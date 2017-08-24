@@ -20,6 +20,11 @@ export function channelReducer(s: ChannelState = CHANNEL_INITIAL_STATE, action: 
 
       return newState;
 
+    case "[Channel] Remove Channel":
+      if (newState[action.channel]) delete newState[action.channel];
+
+      return newState;
+
     case "[Channel] Add Moderator":
       if (!newState[action.payload.channel]) newState = initializeChannel(newState, action.payload.channel);
 

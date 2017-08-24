@@ -118,6 +118,11 @@ export interface ModsEvent {
   mods: string[];
 }
 
+export interface NamesEvent {
+  channel: string;
+  names: string[];
+}
+
 export interface NoticeEvent {
   channel: string;
   messageId: KnownMsgIds;
@@ -284,6 +289,7 @@ export interface ClientEventMap extends InternalEvents {
   "message": MessageEvent;
   "mod": ModEvent;
   "mods": ModsEvent;
+  "names": NamesEvent;
   "notice": NoticeEvent;
   "part": PartEvent;
   "ping": PingEvent;

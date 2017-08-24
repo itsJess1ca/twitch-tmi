@@ -47,6 +47,10 @@ export interface AddChannelAction {
   type: "[Channel] Add Channel";
   channel: string;
 }
+export interface RemoveChannelAction {
+  type: "[Channel] Remove Channel";
+  channel: string;
+}
 export interface AddModeratorAction {
   type: "[Channel] Add Moderator";
   payload: {
@@ -122,6 +126,7 @@ export type CoreActionTypes =
 
 export type ChannelActionTypes =
   AddChannelAction |
+  RemoveChannelAction |
   AddModeratorAction |
   RemoveModeratorAction |
   SetUserStateAction |

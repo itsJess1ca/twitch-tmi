@@ -1,12 +1,18 @@
 import {
   AddChannelAction,
-  AddModeratorAction, ClearChannelsAction, ClearModeratorsAction, RemoveModeratorAction,
+  AddModeratorAction, ClearChannelsAction, ClearModeratorsAction, RemoveChannelAction, RemoveModeratorAction,
   SetUserStateAction
 } from '../state.types';
 
 export function addChannel(channel: string): AddChannelAction {
   return {
     type: '[Channel] Add Channel',
+    channel
+  };
+}
+export function removeChannel(channel: string): RemoveChannelAction {
+  return {
+    type: "[Channel] Remove Channel",
     channel
   };
 }
