@@ -3,11 +3,12 @@ import { noop } from '../../../utils/noop';
 import { __event$__, store } from '../client';
 import { isJustinfan } from '../../../utils/type-checks';
 import { Subject } from 'rxjs/Subject';
-import { ClientEventMap } from '../event-types';
+import { ClientEventMap, UserState } from '../event-types';
 import { logger } from '../../logger';
 import { buildEvent } from '../../../utils/build-event';
 import { setChannels, setLastJoinedChannel } from '../../state/core/core.actions';
 import { addChannel, removeChannel, setUserState } from '../../state/channel/channel.actions';
+import { extractNumber } from '../../../utils/extract-number';
 
 export function handleOtherMessages(message: ParsedMessage, event$: Subject<any>) {
   const commands = {
@@ -73,11 +74,23 @@ export function handleOtherMessages(message: ParsedMessage, event$: Subject<any>
 
         if (message.content.includes("hosting you for")) {
           // Someone is hosting the channel and the message contains how many viewers..
+          const count = extractNumber(message.content);
 
+          __event$__.next(buildEvent('hosted', {
+            username: message.content.split(' ')[0],
+            channel: message.channel,
+            viewers: count,
+            autohost: message.content.includes('auto')
+          }, message.raw));
 
         } else if (message.content.includes("hosting you")) {
           // Some is hosting the channel, but no viewer(s) count provided in the message..
-
+          __event$__.next(buildEvent('hosted', {
+            username: message.content.split(' ')[0],
+            channel: message.channel,
+            viewers: 0,
+            autohost: message.content.includes('auto')
+          }, message.raw));
         }
       } else {
         // Message is an action (/me <message>)..
@@ -85,19 +98,45 @@ export function handleOtherMessages(message: ParsedMessage, event$: Subject<any>
         if (message.content.match(/^\u0001ACTION ([^\u0001]+)\u0001$/)) {
           message.tags["message-type"] = "action";
 
-          /*this.emits(["action", "message"], [
-            [chan, message.tags, msg.match(/^\u0001ACTION ([^\u0001]+)\u0001$/)[1], false],
-            [chan, message.tags, msg.match(/^\u0001ACTION ([^\u0001]+)\u0001$/)[1], false]
-          ]);*/
+          __event$__.next(buildEvent('action',  {
+            channel: message.channel,
+            userstate: message.tags as UserState,
+            message: message.content.match(/^\u0001ACTION ([^\u0001]+)\u0001$/)[1],
+            self: false
+          }, message.raw));
+          __event$__.next(buildEvent('message',  {
+            channel: message.channel,
+            userstate: message.tags as UserState,
+            message: message.content.match(/^\u0001ACTION ([^\u0001]+)\u0001$/)[1],
+            self: false
+          }, message.raw));
+
         } else {
           if (message.tags.hasOwnProperty("bits")) {
             // Message is a cheer
+            __event$__.next(buildEvent('cheer',  {
+              channel: message.channel,
+              userstate: message.tags as UserState,
+              message: message.content
+            }, message.raw));
 
           } else {
             // Message is a regular chat message..
-
             message.tags["message-type"] = "chat";
             logger.info(`[${message.channel}] <${message.tags['username']}>: ${message.content}`);
+
+            __event$__.next(buildEvent('chat',  {
+              channel: message.channel,
+              userstate: message.tags as UserState,
+              message: message.content,
+              self: false
+            }, message.raw));
+            __event$__.next(buildEvent('message',  {
+              channel: message.channel,
+              userstate: message.tags as UserState,
+              message: message.content,
+              self: false
+            }, message.raw));
           }
         }
       }
