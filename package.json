@@ -2,7 +2,8 @@
   "name": "twitch-tmi",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./build/index.js",
+  "types": "./build/index.d.ts",
   "scripts": {
     "prebuild": "npm run test",
     "build": "npm run clean && npm run build:typescript",
