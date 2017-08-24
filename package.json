@@ -1,6 +1,6 @@
 {
   "name": "tmi-lowdown",
-  "version": "0.0.0-semantically-released",
+  "version": "0.0.0",
   "description": "tmi-lowdown provides a simple interface to interact with a Twitch chat.",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
@@ -21,7 +21,7 @@
   },
   "keywords": [],
   "author": "LayerOne <jed@layerone.io> (https://layerone.io)",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "dependencies": {
     "babel-polyfill": "^6.16.0",
     "chalk": "^2.1.0",
