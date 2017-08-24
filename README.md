@@ -1,17 +1,20 @@
 [![Build Status](https://travis-ci.org/j3ddesign/twitch-tmi.svg?branch=master)](https://travis-ci.org/j3ddesign/twitch-tmi)
 
-Twitch Tmi
+TMI-Lowdown
 --------------------
 
 Twitch chat parser powered by Typescript and Rxjs.
 
-Currently a work in progress, will deploy to NPM once ready.
+`npm install tmi-lowdown`
+
+Get the lowdown on twitch chat with a simple but powerful interface making ws-irc easy.
+
+
 
 
 
 Dev
 --------------
-Currently index.ts is a bit of a playground for testing the client interface etc. This will eventually be the library entry point.
 
 setup: 
 ```
