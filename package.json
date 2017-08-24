@@ -1,6 +1,6 @@
 {
   "name": "tmi-lowdown",
-  "version": "0.0.0-development",
+  "version": "0.0.0-semantically-released",
   "description": "tmi-lowdown provides a simple interface to interact with a Twitch chat.",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",

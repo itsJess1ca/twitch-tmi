@@ -1,4 +1,4 @@
-sudo: required
+sudo: false
 dist: trusty
 language: node_js
 git:
@@ -13,7 +13,8 @@ node_js:
 
 before_script:
   - npm prune
-script: npm run ci
+script:
+  - npm run ci
 after_success:
   - npm run semantic-release
 branches:
