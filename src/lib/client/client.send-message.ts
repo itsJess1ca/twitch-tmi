@@ -12,7 +12,9 @@ import { transformEmotes } from '../parser/transform-emotes';
 import { logger } from '../logger';
 import { buildEvent } from '../../utils/build-event';
 
-export function sendMessage(delay: number, channel: string, message: string, cb: PromiseCB) {
+export function __sendMessage(channel: string, message: string, cb: PromiseCB) {
+  const latency = store.get('connection').currentLatency;
+  const delay = latency <= 600 ? 600 : latency + 100;
   return new Promise((resolve, reject) => {
     if (__ws__ !== null && __ws__.readyState !== 2 && __ws__.readyState !== 3 && !isJustinfan(store.get('core').username)) {
       if (!store.get('channel')[formatChannelName(channel)].userstate)
@@ -23,7 +25,7 @@ export function sendMessage(delay: number, channel: string, message: string, cb:
         message = msg[0];
 
         setTimeout(() => {
-          sendMessage(delay, channel, msg[1], () => {});
+          __sendMessage(channel, msg[1], () => {});
         }, 350);
       }
 

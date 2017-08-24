@@ -4,14 +4,22 @@
     "target": "es6",
     "module": "commonjs",
     "moduleResolution": "node",
-    "lib": ["es7"],
-    "sourceMap": true,
-    "typeRoots": ["node_modules/@types"]
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "declaration": true,
+    "removeComments": true,
+    "lib": [
+      "es2015",
+      "es2016",
+      "es7"
+    ],
+    "sourceMap": true
   },
   "include": [
     "src/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "**/*.spec.ts"
   ]
 }

@@ -2,7 +2,7 @@ import { ClientConnect, __ws__ } from './client.connect';
 import { fallback } from '../../utils/fallback';
 import { justinfan } from '../../utils/justinfan';
 import { ParsedMessage, parseMessage } from '../parser/message';
-import { ClientOnMessage, SplitMessage } from './client.handle-message';
+import { SplitMessage } from './client.handle-message';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/map';
@@ -25,6 +25,8 @@ import { ClientEventMap } from './event-types';
 import { logger, LoggingLevels } from '../logger';
 import { __sendCommand } from './client.send-command';
 import { ClientInterface } from './client.interface';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { ReducerStateMap, ReducerTypesMap } from '../state/store.types';
 
 export const store = createStore({
   core: coreReducer,

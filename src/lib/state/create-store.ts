@@ -16,7 +16,7 @@ export function createStore(reducers: Reducers) {
 
   return {
     dispatch: <ReducerName extends keyof ReducerTypesMap>(reducer: ReducerName, action: ReducerTypesMap[ReducerName]) => {
-      logger.debug(green(action.type));
+      logger.debug(green((action as any).type));
       const obj: {[reducer: string]: any} = {};
       obj[reducer] = reducers[reducer](state$.value[reducer], action);
       state$.next(Object.assign({}, state$.value, obj));

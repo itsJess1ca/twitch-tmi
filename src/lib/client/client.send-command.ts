@@ -7,7 +7,7 @@ import { logger } from '../logger';
 import { promiseTimeout } from '../../utils/promise-timeout';
 import { store } from './client';
 
-export function __sendCommand<T = any>(channel: string, command: string, callback: PromiseCB): Promise<T> {
+export function __sendCommand<T>(channel: string, command: string, callback: PromiseCB): Promise<T> {
   return new Promise((resolve, reject) => {
     const latency = store.get('connection').currentLatency;
     const delay = latency <= 600 ? 600 : latency + 100;
