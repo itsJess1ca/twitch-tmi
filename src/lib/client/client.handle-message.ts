@@ -91,7 +91,7 @@ export function ClientHandleMessage(message: ParsedMessage) {
           const pingTimeout = setTimeout(() => {
             if (__ws__ !== null) {
               const wasCloseCalled = false;
-              console.error("Ping timeout.");
+              logger.error("Ping timeout.");
               __ws__.close();
 
               clearInterval(pingLoop);

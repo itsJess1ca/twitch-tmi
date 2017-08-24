@@ -51,7 +51,7 @@ export function HandleTmiMessage(message: ParsedMessage, event$: Subject<any>): 
         const pingTimeout = setTimeout(() => {
           if (__ws__ !== null) {
             store.dispatch('connection', closeConnection(false));
-            console.error("Ping timeout.");
+            logger.error("Ping timeout.");
             __ws__.close();
 
             clearInterval(pingLoop);
