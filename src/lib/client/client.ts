@@ -37,7 +37,6 @@ export const store = createStore({
 export let __event$__;
 
 export function Client(opts: ClientOptions): ClientInterface {
-
   opts.connection = fallback(opts.connection, {});
   opts.identity = fallback(opts.identity, {});
 
