@@ -33,13 +33,18 @@ export function __sendMessage(channel: string, message: string, cb: PromiseCB) {
 
       const emotes = {};
       const emoteSets = store.get('core').emoteSets;
-      Object.keys(emoteSets)
-        .forEach((id) => {
-          emoteSets[id].forEach((emote) => {
-            if (isRegex(emote.code)) { return emoteRegex(message, emote.code, emote.id, emotes); }
-            emoteString(message, emote.code, emote.id, emotes);
+      if (emoteSets) {
+        logger.info('emoteSets', emoteSets);
+        Object.keys(emoteSets)
+          .forEach((id) => {
+            emoteSets[id].forEach((emote) => {
+              if (isRegex(emote.code)) {
+                return emoteRegex(message, emote.code, emote.id, emotes);
+              }
+              emoteString(message, emote.code, emote.id, emotes);
+            });
           });
-        });
+      }
 
       //tslint:disable-next-line:max-line-length
       const userstate = Object.assign({}, store.get('channel')[formatChannelName(channel)].userstate, parseEmotes({ emotes: transformEmotes(emotes) || null }));
