@@ -527,7 +527,7 @@ export function HandleTmiMessage(message: ParsedMessage, event$: Subject<any>): 
         store.dispatch('core', setLastJoinedChannel(message.channel));
         store.dispatch('channel', addChannel(message.channel));
         logger.info(`Joined ${message.channel}`);
-        __ws__.next(buildEvent('join', {
+        __event$__.next(buildEvent('join', {
           username: opts().identity.username,
           channel: message.channel,
           self: true
