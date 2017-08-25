@@ -1,3 +1,4 @@
+
 {
   "name": "tmi-lowdown",
   "version": "0.1.0",
@@ -6,18 +7,21 @@
   "module": "./build/index.js",
   "types": "./build/index.d.ts",
   "scripts": {
-    "build": "npm run clean && npm run build:typescript",
+    "build": "npm run clean && npm run build:typescript && npm run copypackage",
     "build:typescript": "tsc",
+    "ci": "npm run lint && npm run test && npm run build",
     "clean": "rimraf build",
+    "commit": "git-cz",
+    "copypackage": "cpx \"package.json\" build",
+    "lint": "tslint src",
+
+    "prepublishOnly": "npm run build",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "start": "nodemon --exec \"ts-node src/index\" -e ts,js,json --watch src",
+
     "test": "cross-env NODE_ENV=test jest",
     "test:watch": "cross-env NODE_ENV=test jest --watch",
-    "test:coverage": "npm test -- --coverage --collectCoverageFrom 'app/**/*.js' --collectCoverageFrom 'lib/**/*.js'",
-    "lint": "tslint src",
-    "ci": "npm run lint && npm run test && npm run build",
-    "commit": "git-cz",
-    "prepublishOnly": "npm run build",
-    "semantic-release": "semantic-release pre && pre-publish.sh && cp package.json build/ && cd build && npm publish && semantic-release post"
+    "test:coverage": "npm test -- --coverage --collectCoverageFrom 'app/**/*.js' --collectCoverageFrom 'lib/**/*.js'"
   },
   "keywords": [
     "twitch",
@@ -42,6 +46,7 @@
     "@types/request": "^2.0.2",
     "@types/ws": "^3.0.2",
     "commitizen": "^2.9.6",
+    "cpx": "^1.5.0",
     "cross-env": "^3.2.4",
     "cz-conventional-changelog": "^2.0.0",
     "exports-loader": "^0.6.3",

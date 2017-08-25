@@ -37,7 +37,7 @@ export const store = createStore({
 export let __event$__;
 
 export function Client(opts: ClientOptions): ClientInterface {
-  
+
   logger.setLoggingLevel(fallback(opts.loggingLevel, 'info'));
 
   opts.connection = fallback(opts.connection, {});

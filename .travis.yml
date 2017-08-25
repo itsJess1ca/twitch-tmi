@@ -13,6 +13,7 @@ before_script:
 script:
 - npm run ci
 after_success:
+- cd build
 - npm run semantic-release
 branches:
   except:
