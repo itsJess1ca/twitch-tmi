@@ -13,7 +13,6 @@
     "commit": "git-cz",
     "copypackage": "cpx \"package.json\" build",
     "lint": "tslint src",
-    "prepublishOnly": "npm run build",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "start": "nodemon --exec \"ts-node src/index\" -e ts,js,json --watch src",
     "test": "cross-env NODE_ENV=test jest",
