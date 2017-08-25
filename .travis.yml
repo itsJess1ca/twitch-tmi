@@ -16,8 +16,6 @@ before_script:
 script:
   - npm run ci
 after_success:
-  - cp package.json build/
-  - cd build
   - npm run semantic-release
 branches:
   except:

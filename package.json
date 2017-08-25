@@ -17,7 +17,7 @@
     "ci": "npm run lint && npm run test && npm run build",
     "commit": "git-cz",
     "prepublishOnly": "npm run build",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+    "semantic-release": "semantic-release pre && cp package.json build/ && cd build && npm publish && cd ../ && semantic-release post"
   },
   "keywords": [
     "twitch",
