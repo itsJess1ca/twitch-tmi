@@ -512,7 +512,6 @@ export function HandleTmiMessage(message: ParsedMessage, event$: Subject<any>): 
     },
 
     "USERSTATE": () => {
-      console.log('message', message);
       message.tags['username'] = opts().identity.username;
 
       if (message.tags['user-type'] === 'mod') {
