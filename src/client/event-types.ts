@@ -95,6 +95,7 @@ export interface HostingEvent {
 export interface JoinEvent {
   channel: string;
   username: string;
+  userstate?: UserState;
   self: boolean;
 }
 

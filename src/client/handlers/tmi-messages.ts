@@ -531,6 +531,7 @@ export function HandleTmiMessage(message: ParsedMessage, event$: Subject<any>): 
         __event$__.next(buildEvent('join', {
           username: opts().identity.username,
           channel: message.channel,
+          userstate: message.tags as UserState,
           self: true
         }, message.raw));
       }
