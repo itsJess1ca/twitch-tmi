@@ -74,9 +74,11 @@ export function Client(opts: ClientOptions): ClientInterface {
     .messages
     .subscribe((message: string) => {
       if (__ws__ !== null && __ws__.readyState !== 2 && __ws__.readyState !== 3) {
+        logger.debug(`[Message Queue] Sending: ${message}`);
         __ws__.send(message);
       } else {
         // Websocket isn't currently connected, requeue our message
+        logger.debug(`[Message Queue] Requeue: ${message}`);
         messageQueue$.addMessage(message);
       }
     });
