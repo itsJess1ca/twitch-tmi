@@ -12,27 +12,19 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/observable/from';
 import { HandleNoPrefixMessage } from './handlers/no-prefix';
 import { HandleTmiMessage } from './handlers/tmi-messages';
-import { createStore } from '../state/create-store';
-import { coreReducer } from '../state/core/core.reducer';
 import { handleJtvMessages } from './handlers/jtv-messages';
 import { handleOtherMessages } from './handlers/other-messages';
 import { setChannels, setLoggingLevel, setOptions, setRateLimit } from '../state/core/core.actions';
-import { channelReducer } from '../state/channel/channel.reducer';
-import { connectionReducer } from '../state/connection/connection.reducer';
 import { closeConnection } from '../state/connection/connection.actions';
 import { CannotCloseWS } from '../utils/errors';
 import { ClientEventMap } from './event-types';
 import { logger, LoggingLevels } from '../logger';
 import { __sendCommand } from './client.send-command';
 import { ClientInterface } from './client.interface';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { ReducerStateMap, ReducerTypesMap } from '../state/store.types';
+import { messageQueue } from './message-queue';
+import { store } from './store';
 
-export const store = createStore({
-  core: coreReducer,
-  channel: channelReducer,
-  connection: connectionReducer
-});
+export const messageQueue$ = messageQueue(store);
 
 export let __event$__;
 
@@ -78,6 +70,16 @@ export function Client(opts: ClientOptions): ClientInterface {
       }
     }
   }
+  messageQueue$
+    .messages
+    .subscribe((message: string) => {
+      if (__ws__ !== null && __ws__.readyState !== 2 && __ws__.readyState !== 3) {
+        __ws__.send(message);
+      } else {
+        // Websocket isn't currently connected, requeue our message
+        messageQueue$.addMessage(message);
+      }
+    });
 
 
   message$
