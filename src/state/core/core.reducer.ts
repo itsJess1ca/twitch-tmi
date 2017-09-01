@@ -17,14 +17,17 @@ export interface CoreState {
       id: number;
     }]
   };
+  rateLimit?: number;
 }
 
-export const CORE_INITIAL_STATE: CoreState = {username: null, channels: [], loggingLevel: "info", emoteSets: {}};
+export const CORE_INITIAL_STATE: CoreState = {username: null, channels: [], loggingLevel: "info", emoteSets: {}, rateLimit: 300};
 
 export function coreReducer(s: CoreState = CORE_INITIAL_STATE, action: CoreActionTypes): CoreState {
   switch (action.type) {
     case "[Core] Set Username":
       return Object.assign({}, s, {username: action.username});
+    case "[Core] Set RateLimit":
+      return Object.assign({}, s, {rateLimit: action.payload.rateLimit});
     case "[Core] Set Channels":
       return Object.assign({}, s, {channels: action.channels});
     case "[Core] Set Options":

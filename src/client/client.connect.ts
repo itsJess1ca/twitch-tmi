@@ -6,8 +6,11 @@ import { closeConnection, incrementReconnections, setReconnectTimer } from '../s
 import { ClientEventMap } from './event-types';
 import { logger } from '../logger';
 import { buildEvent } from '../utils/build-event';
+import { messageQueue } from './message-queue';
+import { Observable } from 'rxjs/Observable';
 
 export let __ws__;
+export const messageQueue$ = messageQueue();
 let options: ClientOptions;
 
 export const ClientConnect = function ClientConnect(opts: ClientOptions, message$: Subject<string>, event$: Subject<any>) {
@@ -19,6 +22,17 @@ export const ClientConnect = function ClientConnect(opts: ClientOptions, message
     reconnectTimer = opts.connection.maxReconnectInterval;
   }
   store.dispatch('connection', setReconnectTimer(reconnectTimer));
+
+  messageQueue()
+    .messages
+    .subscribe((message: string) => {
+      if (__ws__ !== null && __ws__.readyState !== 2 && __ws__.readyState !== 3) {
+        __ws__.send(message);
+      } else {
+        // Websocket isn't currently connected, requeue our message
+        messageQueue$.addMessage(message);
+      }
+    });
 
   function connect() {
     __ws__ = new WebSocket(`${options.connection.secure ? 'wss' : 'ws'}://${options.connection.server}:${options.connection.port}/`, 'irc');

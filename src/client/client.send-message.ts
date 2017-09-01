@@ -1,5 +1,5 @@
 import { PromiseCB } from './client.send-command';
-import { __ws__ } from './client.connect';
+import { __ws__, messageQueue$ } from './client.connect';
 import { isJustinfan, isRegex } from '../utils/type-checks';
 import { __event$__, store } from './client';
 import { setUserState } from '../state/channel/channel.actions';
@@ -29,7 +29,7 @@ export function __sendMessage(channel: string, message: string, cb: PromiseCB) {
         }, 350);
       }
 
-      __ws__.send(`PRIVMSG ${formatChannelName(channel)} :${message}`);
+      messageQueue$.addMessage(`PRIVMSG ${formatChannelName(channel)} :${message}`);
 
       const emotes = {};
       const emoteSets = store.get('core').emoteSets;

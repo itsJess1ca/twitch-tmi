@@ -5,6 +5,12 @@ export interface SetUsernameAction {
   type: "[Core] Set Username";
   username: string;
 }
+export interface SetRateLimitAction {
+  type: "[Core] Set RateLimit";
+  payload: {
+    rateLimit: number;
+  };
+}
 export interface SetChannelsAction {
   type: "[Core] Set Channels";
   channels: string[];
@@ -114,6 +120,7 @@ export interface OtherAction {
 
 export type CoreActionTypes =
   SetUsernameAction |
+  SetRateLimitAction |
   SetChannelsAction |
   SetLastJoinedChannelAction |
   SetOptionsAction |

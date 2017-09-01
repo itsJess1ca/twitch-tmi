@@ -1,7 +1,4 @@
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/fromPromise';
-import 'rxjs/add/operator/timeout';
-import { __ws__ } from './client.connect';
+import { __ws__, messageQueue$ } from './client.connect';
 import { formatChannelName } from '../utils/channel';
 import { logger } from '../logger';
 import { promiseTimeout } from '../utils/promise-timeout';
@@ -16,10 +13,10 @@ export function __sendCommand<T>(channel: string, command: string, callback: Pro
     if (__ws__ !== null && __ws__.readyState !== 2 && __ws__.readyState !== 3) {
       if (channel) {
         logger.info(`[${formatChannelName(channel)}] Executing command: ${command}`);
-        __ws__.send(`PRIVMSG ${formatChannelName(channel)} :${command}`);
+        messageQueue$.addMessage(`PRIVMSG ${formatChannelName(channel)} :${command}`);
       } else {
         logger.info(`Executing command: ${command}`);
-        __ws__.send(command);
+        messageQueue$.addMessage(command);
       }
       callback(resolve, reject);
     } else {

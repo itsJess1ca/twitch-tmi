@@ -2,7 +2,7 @@ import { LoggingLevels } from '../../logger';
 import {
   SetChannelsAction, SetEmoteSetsAction, SetLastJoinedChannelAction, SetLoggingLevelAction, SetOptionsAction,
   SetPingLoopAction,
-  SetPingTimeoutAction, SetRawEmotesStringAction,
+  SetPingTimeoutAction, SetRateLimitAction, SetRawEmotesStringAction,
   SetUsernameAction
 } from '../state.types';
 import { ClientOptions } from '../../client/client';
@@ -11,6 +11,14 @@ export function setUsername(payload: string): SetUsernameAction {
   return {
     type: "[Core] Set Username",
     username: payload
+  };
+}
+export function setRateLimit(rateLimit: number): SetRateLimitAction {
+  return {
+    type: '[Core] Set RateLimit',
+    payload: {
+      rateLimit
+    }
   };
 }
 export function setOptions(options: ClientOptions): SetOptionsAction {
