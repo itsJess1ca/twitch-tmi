@@ -2,6 +2,8 @@ import { formatChannelName } from '../utils/channel';
 import { formatUsername } from '../utils/format-username';
 import { __sendCommand } from '../client/client.send-command';
 import { __event$__ } from '../client/client';
+import 'rxjs/add/operator/take';
+import 'rxjs/add/operator/filter';
 
 export function ban({channel, username, reason = ""}: BanParams) {
   channel = formatChannelName(channel);
