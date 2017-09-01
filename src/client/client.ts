@@ -16,7 +16,7 @@ import { createStore } from '../state/create-store';
 import { coreReducer } from '../state/core/core.reducer';
 import { handleJtvMessages } from './handlers/jtv-messages';
 import { handleOtherMessages } from './handlers/other-messages';
-import { setChannels, setLoggingLevel, setOptions } from '../state/core/core.actions';
+import { setChannels, setLoggingLevel, setOptions, setRateLimit } from '../state/core/core.actions';
 import { channelReducer } from '../state/channel/channel.reducer';
 import { connectionReducer } from '../state/connection/connection.reducer';
 import { closeConnection } from '../state/connection/connection.actions';
@@ -37,6 +37,8 @@ export const store = createStore({
 export let __event$__;
 
 export function Client(opts: ClientOptions): ClientInterface {
+
+  const moderatorStatus = {};
 
   logger.setLoggingLevel(fallback(opts.loggingLevel, 'info'));
 
@@ -119,6 +121,29 @@ export function Client(opts: ClientOptions): ClientInterface {
     .filter(event => event.type === '_RECONNECT_')
     .do(() => reconnect())
     .subscribe();
+
+  __event$__
+    .filter(event => event.type === 'join' || event.type === 'mod' || event.type === 'unmod')
+    .subscribe(event => {
+      if (event.type === 'join' && event.self && event.userstate) {
+        moderatorStatus[event.channel] = event.userstate.mod;
+      } else if (event.type === 'mod' && event.username === store.get('core').username) {
+        moderatorStatus[event.channel] = true;
+      } else if (event.type === 'unmod' && event.username === store.get('core').username) {
+        moderatorStatus[event.channel] = false;
+      }
+
+      let isModInAll = true;
+      for (const channel in moderatorStatus) {
+        if (moderatorStatus.hasOwnProperty(channel)) {
+          if (!moderatorStatus[channel]) {
+            isModInAll = false;
+            break;
+          }
+        }
+      }
+      store.dispatch('core', setRateLimit(isModInAll ? (100 / 30) * 1000 : (20 / 30) * 1000));
+    });
 
 
   // Our exposed API
