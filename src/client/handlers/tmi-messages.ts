@@ -79,6 +79,7 @@ export function HandleTmiMessage(message: ParsedMessage, event$: Subject<any>): 
 
     "NOTICE": () => {
       const generalNotice = (internalPromise: keyof ClientEventMap | [keyof ClientEventMap], msgId: boolean = false) => {
+        logger.trace(`Building general notice events for ${internalPromise}`);
         logger.info(`[${message.channel}] ${message.content}`);
         if (Array.isArray(internalPromise)) {
           for (const p of internalPromise) {
@@ -474,7 +475,7 @@ export function HandleTmiMessage(message: ParsedMessage, event$: Subject<any>): 
       if (message.params.length > 1) {
         // User has been banned or timed out by a mod
         const duration = fallback(message.tags['ban-duration'], null);
-        const reason = replaceAll(fallback(message.tags['ban-duration'], null), {
+        const reason = replaceAll(fallback(message.tags['ban-reason'], null), {
           "\\\\s": " ",
           "\\\\:": ";",
           "\\\\\\\\": "\\",
