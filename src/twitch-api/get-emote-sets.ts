@@ -2,7 +2,7 @@
 import { _TwitchApi } from './twitch-api';
 import { GetEmoteSetsResponse } from './twitch-types';
 import { Observable } from 'rxjs/Observable';
-import { store } from '../client/client';
+import { store } from '../client/store';
 import { setRawEmotesString } from '../state/core/core.actions';
 
 export function getEmoteSets(sets: string): Observable<GetEmoteSetsResponse> {

@@ -1,6 +1,6 @@
 import { ParsedMessage } from '../../parser/message';
 import { noop } from '../../utils/noop';
-import { __event$__, store } from '../client';
+import { __event$__ } from '../client';
 import { isJustinfan } from '../../utils/type-checks';
 import { Subject } from 'rxjs/Subject';
 import { ClientEventMap, UserState } from '../event-types';
@@ -9,6 +9,7 @@ import { buildEvent } from '../../utils/build-event';
 import { setChannels, setLastJoinedChannel } from '../../state/core/core.actions';
 import { addChannel, removeChannel, setUserState } from '../../state/channel/channel.actions';
 import { extractNumber } from '../../utils/extract-number';
+import { store } from '../store';
 
 export function handleOtherMessages(message: ParsedMessage, event$: Subject<any>) {
   const commands = {

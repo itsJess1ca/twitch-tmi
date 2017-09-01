@@ -1,7 +1,7 @@
 import { ParsedMessage } from '../../parser/message';
 import { noop } from '../../utils/noop';
 import { fallback } from '../../utils/fallback';
-import { __event$__, ClientOptions, store } from '../client';
+import { __event$__, ClientOptions } from '../client';
 import {
   setEmoteSets, setLastJoinedChannel, setPingLoop, setPingTimeout,
   setUsername
@@ -22,6 +22,7 @@ import {
 import { isJustinfan } from '../../utils/type-checks';
 import { getEmoteSets } from '../../twitch-api/get-emote-sets';
 import { mergeArrays } from '../../utils/merge-arrays';
+import { store } from '../store';
 
 export function HandleTmiMessage(message: ParsedMessage, event$: Subject<any>): void {
   const opts = () => store.get('core').options;

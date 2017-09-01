@@ -1,10 +1,11 @@
 import { ParsedMessage } from '../../parser/message';
-import { __event$__, store } from '../client';
+import { __event$__ } from '../client';
 import { addModerator, removeModerator } from '../../state/channel/channel.actions';
 import { Subject } from "rxjs/Subject";
 import { ClientEventMap } from '../event-types';
 import { logger } from '../../logger';
 import { buildEvent } from '../../utils/build-event';
+import { store } from '../store';
 
 export function handleJtvMessages(message: ParsedMessage, event$: Subject<any>) {
   const commands = {

@@ -1,7 +1,7 @@
 import * as request from 'request';
 import { CoreOptions, RequiredUriUrl, Headers } from 'request';
 import { Observable } from 'rxjs/Observable';
-import { store } from '../client/client';
+import { store } from '../client/store';
 import { fallback } from '../utils/fallback';
 import { isURL } from '../utils/type-checks';
 

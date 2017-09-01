@@ -1,5 +1,5 @@
 import * as WebSocket from 'ws';
-import { ClientOptions, store } from './client';
+import { ClientOptions } from './client';
 import { Subject } from 'rxjs/Subject';
 import { clearChannels } from '../state/channel/channel.actions';
 import { closeConnection, incrementReconnections, setReconnectTimer } from '../state/connection/connection.actions';
@@ -7,6 +7,7 @@ import { ClientEventMap } from './event-types';
 import { logger } from '../logger';
 import { buildEvent } from '../utils/build-event';
 import { Observable } from 'rxjs/Observable';
+import { store } from './store';
 
 export let __ws__;
 let options: ClientOptions;

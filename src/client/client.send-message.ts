@@ -1,7 +1,7 @@
 import { PromiseCB } from './client.send-command';
-import { __ws__, messageQueue$ } from './client.connect';
+import { __ws__ } from './client.connect';
 import { isJustinfan, isRegex } from '../utils/type-checks';
-import { __event$__, store } from './client';
+import { __event$__ } from './client';
 import { setUserState } from '../state/channel/channel.actions';
 import { splitLine } from '../utils/split-line';
 import { formatChannelName } from '../utils/channel';
@@ -11,6 +11,8 @@ import { parseEmotes } from '../parser/emotes';
 import { transformEmotes } from '../parser/transform-emotes';
 import { logger } from '../logger';
 import { buildEvent } from '../utils/build-event';
+import { store } from './store';
+import { messageQueue$ } from './client';
 
 export function __sendMessage(channel: string, message: string, cb: PromiseCB) {
   const latency = store.get('connection').currentLatency;

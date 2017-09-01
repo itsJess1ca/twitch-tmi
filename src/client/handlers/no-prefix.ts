@@ -1,10 +1,10 @@
 import { ParsedMessage } from '../../parser/message';
 import { __ws__ } from '../client.connect';
-import { store } from '../client';
 import { Subject } from "rxjs/Subject";
 import { setCurrentLatency } from '../../state/connection/connection.actions';
 import { logger } from '../../logger';
 import { buildEvent } from '../../utils/build-event';
+import { store } from '../store';
 
 export function HandleNoPrefixMessage(message: ParsedMessage, event$: Subject<any>) {
   const commands = {

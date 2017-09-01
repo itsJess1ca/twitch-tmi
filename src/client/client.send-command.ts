@@ -1,8 +1,9 @@
-import { __ws__, messageQueue$ } from './client.connect';
+import { __ws__ } from './client.connect';
 import { formatChannelName } from '../utils/channel';
 import { logger } from '../logger';
 import { promiseTimeout } from '../utils/promise-timeout';
-import { store } from './client';
+import { store } from './store';
+import { messageQueue$ } from './client';
 
 export function __sendCommand<T>(channel: string, command: string, callback: PromiseCB): Promise<T> {
   return new Promise((resolve, reject) => {
