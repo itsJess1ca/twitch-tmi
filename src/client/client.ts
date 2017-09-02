@@ -141,12 +141,14 @@ export function Client(opts: ClientOptions): ClientInterface {
       for (const channel in moderatorStatus) {
         if (moderatorStatus.hasOwnProperty(channel)) {
           if (!moderatorStatus[channel]) {
+            logger.warn(`Not moderated in channel ${channel}`);
             isModInAll = false;
             break;
           }
         }
       }
-      store.dispatch('core', setRateLimit(isModInAll ? (100 / 30) * 1000 : (20 / 30) * 1000));
+      logger.debug(`[Rate Limit] Setting Rate limit to ${isModInAll ? (30 / 100) * 1000 : (30 / 20) * 1000}`);
+      store.dispatch('core', setRateLimit(isModInAll ? (30 / 100) * 1000 : (30 / 20) * 1000));
     });
 
 
