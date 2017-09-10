@@ -127,7 +127,7 @@ export function parseMessage(data: string): ParsedMessage {
 
   message.channel = formatChannelName(fallback(message.params[0], 0));
   message.content = fallback(message.params[1], null);
-  message.messageId = fallback(message.tags['id'], null);
+  message.messageId = fallback(message.tags['id'], message.tags['msg-id'], null);
   message.tags = parseBadges(parseEmotes(message.tags));
 
   // Transform IRCv3 tags
