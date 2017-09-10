@@ -5,9 +5,13 @@
   "main": "./build/index.js",
   "module": "./build/index.js",
   "types": "./build/index.d.ts",
+  "watch": {
+    "build": "src/*.ts"
+  },
   "scripts": {
     "build": "npm run clean && npm run build:typescript && npm run copypackage",
     "build:typescript": "tsc",
+    "build:watch": "npm-watch build",
     "ci": "npm run lint && npm run test && npm run build",
     "clean": "rimraf build",
     "commit": "git-cz",
@@ -48,6 +52,7 @@
     "exports-loader": "^0.6.3",
     "file-loader": "^0.10.0",
     "jest-cli": "^19.0.0",
+    "npm-watch": "^0.2.0",
     "semantic-release": "^7.0.2",
     "timemachine": "^0.3.0",
     "ts-jest": "^20.0.7",
