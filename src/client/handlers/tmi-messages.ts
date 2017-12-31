@@ -451,7 +451,7 @@ export function HandleTmiMessage(message: ParsedMessage, event$: Subject<any>): 
     },
 
     "HOSTTARGET": () => {
-      const msgSplit = message.content.split(" ")[0];
+      const msgSplit = message.content.split(" ");
       const viewers = ~~msgSplit[1] || 0;
       if (msgSplit[0] === '-') {
         // Left host mode
