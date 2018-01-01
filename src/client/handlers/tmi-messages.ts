@@ -452,6 +452,7 @@ export function HandleTmiMessage(message: ParsedMessage, event$: Subject<any>): 
 
     "HOSTTARGET": () => {
       const msgSplit = message.content.split(" ");
+      const hostTarget = msgSplit[0];
       const viewers = ~~msgSplit[1] || 0;
       if (msgSplit[0] === '-') {
         // Left host mode
@@ -463,11 +464,11 @@ export function HandleTmiMessage(message: ParsedMessage, event$: Subject<any>): 
       } else {
         // Entered host mode
 
-        logger.info(`[${message.channel}] Now hosting ${msgSplit[0]} for ${viewers} viewer(s).`);
+        logger.info(`[${message.channel}] Now hosting ${hostTarget} for ${viewers} viewer(s).`);
         __event$__.next(buildEvent('hosting', {
           channel: message.channel,
           viewers: viewers,
-          target: msgSplit[0]
+          target: hostTarget
         }, message.raw));
       }
     },
